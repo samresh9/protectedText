@@ -4,14 +4,16 @@ module.exports = {
     commonjs: true,
     es2021: true,
   },
-  extends: 'airbnb-base',
+  extends: ["airbnb-base", "plugin:prettier/recommended"],
   overrides: [],
   parserOptions: {
-    ecmaVersion: 'latest',
+    ecmaVersion: "latest",
   },
   rules: {
-    'linebreak-style': 0,
-    'no-console': 'off',
-    'eol-last': ['warn', 'always'],
+    "linebreak-style": 0,
+    "no-console": "off",
+    "eol-last": ["warn", "always"],
+    "prettier/prettier": "error",
+    quotes: ["error", { preference: "double" }],
   },
 };

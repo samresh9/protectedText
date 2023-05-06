@@ -13,7 +13,16 @@ module.exports = {
     "linebreak-style": 0,
     "no-console": "off",
     "eol-last": ["warn", "always"],
-    "prettier/prettier": "error",
-    quotes: ["error", { preference: "double" }],
+    quotes: [
+      "error",
+      "double",
+      { avoidEscape: true, allowTemplateLiterals: true },
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
   },
 };

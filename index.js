@@ -14,7 +14,8 @@ connectMongoDb("mongodb://localhost:27017/protectedTextDB")
 
 app.get("/", (req, res) => {
   res.send("hello");
-});
+})
+
 
 app.listen(PORT, () => {
   console.log(`Server started at port ${PORT}`);

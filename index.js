@@ -1,22 +1,21 @@
-const dotenv = require("dotenv").config();
-
+const dotenv = require("dotenv");
 const express = require("express");
-
 const fs = require("fs");
-const path = require("path");
-
 const morgan = require("morgan");
+const path = require("path");
 
 const logger = require("./log/logger");
 
 const app = express();
+dotenv.config();
+
 // Create a file to store httplog from morgan
 const httpLogs = fs.createWriteStream(path.join(__dirname, "httpMorgan.log"), {
   flags: "a",
 });
 // Creating new tokens
 
-morgan.token("type", (req, res) => {
+morgan.token("type", (req, _res) => {
   return req.headers["Content-type"];
 });
 

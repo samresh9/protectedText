@@ -12,14 +12,8 @@ module.exports = {
   rules: {
     "linebreak-style": 0,
     "eol-last": ["warn", "always"],
-    "no-console": [
-      "warn",
-      {
-        allow: ["warn", "error", "info"],
-      },
-    ],
-    "no-unused-vars": "off",
-    "import/no-extraneous-dependencies": "off",
+    "no-console": "error",
+    "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     quotes: [
       "error",
       "double",

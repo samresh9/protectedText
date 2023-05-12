@@ -1,6 +1,6 @@
 const { createLogger, format, transports } = require("winston");
 
-const { combine, timestamp, label, prettyPrint, json } = format;
+const { combine, timestamp, prettyPrint, json } = format;
 
 const transportOption = process.env.TRANSPORT;
 const consoleTransportEnabled = process.env.CONSOLE_TRANSPORT_ENABLED;

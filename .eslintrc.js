@@ -11,8 +11,15 @@ module.exports = {
   },
   rules: {
     "linebreak-style": 0,
-    "no-console": "off",
     "eol-last": ["warn", "always"],
+    "no-console": [
+      "warn",
+      {
+        allow: ["warn", "error", "info"],
+      },
+    ],
+    "no-unused-vars": "off",
+    "import/no-extraneous-dependencies": "off",
     quotes: [
       "error",
       "double",

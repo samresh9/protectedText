@@ -1,15 +1,24 @@
-/* eslint-disable no-unused-vars */
-// eslint-disable-next-line import/no-extraneous-dependencies
 const { createLogger, format, transports } = require("winston");
 
 const { combine, timestamp, label, prettyPrint, json } = format;
+
+const transportOption = process.env.TRANSPORT;
+const consoleTransportEnabled = process.env.CONSOLE_TRANSPORT_ENABLED;
+
 const logger = createLogger({
-  level: "info",
-  format: combine(timestamp(), prettyPrint()),
+  level: process.env.LOG_LEVEL || "info",
+  format: combine(
+    timestamp(),
+    process.env.PRETTY_PRINT === "enabled" ? prettyPrint() : json()
+  ),
   transports: [
-    new transports.Console(),
-    new transports.File({ filename: "combined.log", level: "info" }),
-    new transports.File({ filename: "errors.log", level: "error" }),
+    consoleTransportEnabled === "true" ? new transports.Console() : null,
+    transportOption === "file"
+      ? new transports.File({ filename: "combined.log", level: "info" })
+      : null,
+    transportOption === "file"
+      ? new transports.File({ filename: "errors.log", level: "error" })
+      : null,
   ],
 });
 

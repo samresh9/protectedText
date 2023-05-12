@@ -1,9 +1,10 @@
+const dotenv = require("dotenv").config();
+
 const express = require("express");
 
 const fs = require("fs");
 const path = require("path");
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 const morgan = require("morgan");
 
 const logger = require("./log/logger");
@@ -31,11 +32,9 @@ const { connectMongoDb } = require("./connection");
 
 connectMongoDb("mongodb://localhost:27017/protectedTextDB")
   .then(() => {
-    logger.info("database ok");
-    console.log("Database Connected");
+    logger.info("database connected");
   })
   .catch((err) => {
-    console.log("Error connecting to database", err);
     logger.error(`error occured ${err}`);
   });
 
@@ -45,5 +44,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server started at port ${PORT}`);
+  logger.info(`Server started at port ${PORT}`);
 });

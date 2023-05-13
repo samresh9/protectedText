@@ -19,7 +19,7 @@ const logger = createLogger({
     transportOption === "file"
       ? new transports.File({ filename: "errors.log", level: "error" })
       : null,
-  ],
+  ].filter(Boolean), // The filter(Boolean) method is used to remove any falsy values from an array. In JavaScript, falsy values include false, null, undefined, 0, an empty string (""), and NaN.
 });
 
 module.exports = logger;

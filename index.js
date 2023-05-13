@@ -1,13 +1,15 @@
-const dotenv = require("dotenv");
+require("dotenv").config();
 const express = require("express");
 const fs = require("fs");
 const morgan = require("morgan");
 const path = require("path");
-
+const {
+  handle500Error,
+  handleNotFound,
+} = require("./middlewares/handleErrorsMiddleware");
 const logger = require("./log/logger");
 
 const app = express();
-dotenv.config();
 
 // Create a file to store httplog from morgan
 const httpLogs = fs.createWriteStream(path.join(__dirname, "httpMorgan.log"), {
@@ -41,6 +43,13 @@ app.get("/", (req, res) => {
   logger.info("Inside home");
   res.send("hello");
 });
+app.get("/error", (_req, _res) => {
+  logger.info("Inside home");
+  throw new Error("something is wrong");
+});
+
+app.use(handleNotFound);
+app.use(handle500Error);
 
 app.listen(PORT, () => {
   logger.info(`Server started at port ${PORT}`);

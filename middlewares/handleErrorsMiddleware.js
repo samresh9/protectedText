@@ -5,11 +5,13 @@ const handleNotFound = (req, res, next) => {
 };
 
 const handle500Error = (error, req, res, next) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  const statusCode = res.statusCode < 400 ? 500 : res.statusCode;
   res.status(statusCode);
   res.json({
     message: error.message,
     statusCode,
+    stackTrace:
+      process.env.NODE_ENV === "development" ? error.stack : undefined,
   });
   next();
 };

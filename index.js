@@ -27,7 +27,7 @@ app.use(
     { stream: httpLogs }
   )
 );
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 7000;
 const { connectMongoDb } = require("./connection");
 
 connectMongoDb("mongodb://localhost:27017/protectedTextDB")

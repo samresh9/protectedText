@@ -10,7 +10,6 @@ const {
 const logger = require("./log/logger");
 
 const app = express();
-
 // Create a file to store httplog from morgan
 const httpLogs = fs.createWriteStream(path.join(__dirname, "httpMorgan.log"), {
   flags: "a",

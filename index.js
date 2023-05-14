@@ -1,4 +1,4 @@
-const dotenv = require("dotenv");
+require("dotenv").config();
 const express = require("express");
 const fs = require("fs");
 const morgan = require("morgan");
@@ -7,8 +7,6 @@ const path = require("path");
 const logger = require("./log/logger");
 
 const app = express();
-dotenv.config();
-
 // Create a file to store httplog from morgan
 const httpLogs = fs.createWriteStream(path.join(__dirname, "httpMorgan.log"), {
   flags: "a",

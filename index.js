@@ -1,4 +1,5 @@
 require("dotenv").config();
+const config = require("config");
 const express = require("express");
 const fs = require("fs");
 const morgan = require("morgan");
@@ -43,7 +44,7 @@ app.get("/", (req, res) => {
   res.send("hello");
 });
 app.get("/error", (_req, _res) => {
-  logger.info("Inside home");
+  logger.info("error");
   throw new Error("something is wrong");
 });
 

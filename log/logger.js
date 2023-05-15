@@ -1,23 +1,29 @@
+const config = require("config");
 const { createLogger, format, transports } = require("winston");
 
 const { combine, timestamp, prettyPrint } = format;
-
+const logLevel = config.get("logLevel") || "info";
 const logger = createLogger({
-  level: process.env.LOG_LEVEL || "info",
   format: combine(
     timestamp(),
-    process.env.PRETTY_PRINT === "true" ? prettyPrint() : prettyPrint()
+    config.get("prettyPrint") === "true" ? prettyPrint() : prettyPrint()
   ),
 
   transports: [],
 });
 // logger.add or remove transport from logger from documentation
-if (process.env.LOG_TO_FILE === "true") {
-  logger.add(
-    new transports.File({ filename: process.env.LOG_FILE_PATH, level: "info" })
-  );
-} else {
-  logger.add(new transports.Console());
+switch (config.get("appLogDestination")) {
+  case "FILE":
+    logger.add(
+      new transports.File({
+        filename: config.get("logFilePath"),
+        level: logLevel,
+      })
+    );
+    break;
+  default:
+    logger.add(new transports.Console());
+    break;
 }
 
 module.exports = logger;

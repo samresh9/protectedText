@@ -1,7 +1,8 @@
 module.exports = {
   logger: {
-    logLevel: "info",
+    FilePath: "./log/combined.log",
+    Level: "info",
     prettyPrint: true,
-    appLogDestination: "console",
+    appDestination: "console",
   },
 };

@@ -1,6 +1,6 @@
 module.exports = {
   logger: {
-    logFilePath: "./log/combined2.log",
-    appLogDestination: "FILE",
+    FilePath: "./log/combined2.log",
+    appDestination: "FILE",
   },
 };

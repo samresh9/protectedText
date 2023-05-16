@@ -2,7 +2,7 @@ const config = require("config");
 const { createLogger, format, transports } = require("winston");
 
 const { combine, timestamp, prettyPrint } = format;
-const logLevel = config.get("logLevel") || "info";
+const logLevel = config.get("logger.logLevel");
 const logger = createLogger({
   format: combine(
     timestamp(),

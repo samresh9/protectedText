@@ -1,5 +1,7 @@
 module.exports = {
-  logLevel: "info",
+  logger: {
+    logLevel: "info",
+  },
   prettyPrint: true,
   appLogDestination: "console",
 };

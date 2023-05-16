@@ -3,7 +3,7 @@ const { createLogger, format, transports } = require("winston");
 
 const { combine, timestamp, prettyPrint } = format;
 const loggerConfig = config.get("logger");
-const { Level } = loggerConfig;
+const { level } = loggerConfig;
 
 const logger = createLogger({
   format: combine(
@@ -18,8 +18,8 @@ switch (loggerConfig.destination) {
   case "FILE":
     logger.add(
       new transports.File({
-        filename: loggerConfig.FilePath,
-        level: Level,
+        filename: loggerConfig.filePath,
+        level,
       })
     );
     break;

@@ -1,7 +1,7 @@
 module.exports = {
   logger: {
-    FilePath: "./log/combined.log",
-    Level: "info",
+    filePath: "./log/combined.log",
+    level: "info",
     prettyPrint: true,
     destination: "console",
   },

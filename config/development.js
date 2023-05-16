@@ -1,5 +1,5 @@
 module.exports = {
   logger: {
-    appDestination: "FILE",
+    destination: "FILE",
   },
 };

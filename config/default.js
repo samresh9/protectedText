@@ -3,6 +3,6 @@ module.exports = {
     FilePath: "./log/combined.log",
     Level: "info",
     prettyPrint: true,
-    appDestination: "console",
+    destination: "console",
   },
 };

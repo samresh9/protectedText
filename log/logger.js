@@ -14,7 +14,7 @@ const logger = createLogger({
   transports: [],
 });
 // logger.add or remove transport from logger from documentation
-switch (loggerConfig.appDestination) {
+switch (loggerConfig.destination) {
   case "FILE":
     logger.add(
       new transports.File({

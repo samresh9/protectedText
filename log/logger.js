@@ -6,17 +6,17 @@ const logLevel = config.get("logger.logLevel");
 const logger = createLogger({
   format: combine(
     timestamp(),
-    config.get("prettyPrint") === "true" ? prettyPrint() : prettyPrint()
+    config.get("logger.prettyPrint") === "true" ? prettyPrint() : prettyPrint()
   ),
 
   transports: [],
 });
 // logger.add or remove transport from logger from documentation
-switch (config.get("appLogDestination")) {
+switch (config.get("logger.appLogDestination")) {
   case "FILE":
     logger.add(
       new transports.File({
-        filename: config.get("logFilePath"),
+        filename: config.get("logger.logFilePath"),
         level: logLevel,
       })
     );

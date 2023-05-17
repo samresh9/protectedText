@@ -3,11 +3,12 @@ const express = require("express");
 const fs = require("fs");
 const morgan = require("morgan");
 const path = require("path");
+const cryptoRoutes = require("./routes/cryptoRoutes");
 const {
   handle500Error,
   handleNotFound,
 } = require("./middlewares/handleErrorsMiddleware");
-const logger = require("./log/logger");
+const logger = require("./log/logger").child({ filename: __filename });
 
 const app = express();
 // Create a file to store httplog from morgan
@@ -19,7 +20,8 @@ const httpLogs = fs.createWriteStream(path.join(__dirname, "httpMorgan.log"), {
 morgan.token("type", (req, _res) => {
   return req.headers["Content-type"];
 });
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 // Using format string of predefined tokens
 app.use(
   morgan(
@@ -37,7 +39,7 @@ connectMongoDb("mongodb://localhost:27017/protectedTextDB")
   .catch((err) => {
     logger.error(`error occured ${err}`);
   });
-
+app.use("/crypto", cryptoRoutes);
 app.get("/", (req, res) => {
   logger.info("Inside home");
   res.send("hello");

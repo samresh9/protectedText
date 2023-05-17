@@ -8,11 +8,9 @@ const {
   handle500Error,
   handleNotFound,
 } = require("./middlewares/handleErrorsMiddleware");
-const winstonLogger = require("./log/logger");
+const logger = require("./log/logger").child({ filename: __filename });
 
-const logger = winstonLogger.child({ filename: __filename });
 const app = express();
-
 // Create a file to store httplog from morgan
 const httpLogs = fs.createWriteStream(path.join(__dirname, "httpMorgan.log"), {
   flags: "a",

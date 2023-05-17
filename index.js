@@ -8,6 +8,7 @@ const {
   handleNotFound,
 } = require("./middlewares/handleErrorsMiddleware");
 const logger = require("./log/logger");
+const noteRoutes = require("./routes/notesRoutes");
 
 const app = express();
 // Create a file to store httplog from morgan
@@ -37,6 +38,8 @@ connectMongoDb("mongodb://localhost:27017/protectedTextDB")
   .catch((err) => {
     logger.error(`error occured ${err}`);
   });
+
+app.use("/api/notes", noteRoutes);
 
 app.get("/", (req, res) => {
   logger.info("Inside home");

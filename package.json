@@ -24,6 +24,7 @@
   "homepage": "https://github.com/samresh9/protectedText#readme",
   "dependencies": {
     "config": "^3.3.9",
+    "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongoose": "^7.1.0",
@@ -32,7 +33,6 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "crypto-js": "^4.1.1",
     "eslint": "^8.39.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.8.0",

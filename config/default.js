@@ -5,7 +5,4 @@ module.exports = {
     prettyPrint: true,
     destination: "console",
   },
-  encryptionKey: {
-    secretKey: process.env.SECRET_KEY,
-  },
 };

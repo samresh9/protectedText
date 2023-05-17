@@ -27,5 +27,5 @@ switch (loggerConfig.destination) {
     logger.add(new transports.Console());
     break;
 }
-
-module.exports = logger;
+const winstonLogger = logger.child({ filename: __filename });
+module.exports = winstonLogger;

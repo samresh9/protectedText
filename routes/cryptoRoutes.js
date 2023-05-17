@@ -5,11 +5,11 @@ const logger = require("../log/logger");
 const router = express.Router();
 router.post("/encrypt", (req, res) => {
   try {
-    const { note } = req.body;
+    const { note, secretKey } = req.body;
     if (!note) {
       throw new Error("Note is required");
     }
-    const encryptedData = encryptData(note);
+    const encryptedData = encryptData(note, secretKey);
     res.json({ encryptedData });
   } catch (err) {
     logger.error(` Inside cryptoRoutes ,Message:-${err.message}`);
@@ -19,11 +19,11 @@ router.post("/encrypt", (req, res) => {
 
 router.post("/decrypt", (req, res) => {
   try {
-    const { encryptedData } = req.body;
+    const { encryptedData, secretKey } = req.body;
     if (!encryptedData) {
       throw new Error("Data is required");
     }
-    const note = decryptData(encryptedData);
+    const note = decryptData(encryptedData, secretKey);
     res.json({ note });
   } catch (err) {
     logger.error(err.stack);

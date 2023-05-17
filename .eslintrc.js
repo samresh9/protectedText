@@ -14,12 +14,6 @@ module.exports = {
     "eol-last": ["warn", "always"],
     "no-console": "error",
     "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        devDependencies: true,
-      },
-    ],
     quotes: [
       "error",
       "double",

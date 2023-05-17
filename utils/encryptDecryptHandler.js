@@ -1,13 +1,10 @@
-const config = require("config");
 const CryptoJS = require("crypto-js");
 
-const secretKey = config.get("encryptionKey.secretKey");
-
-function encryptData(data) {
+function encryptData(data, secretKey) {
   const cipherText = CryptoJS.AES.encrypt(data, secretKey).toString();
   return cipherText;
 }
-function decryptData(encryptedData) {
+function decryptData(encryptedData, secretKey) {
   const plainText = CryptoJS.AES.decrypt(encryptedData, secretKey).toString(
     CryptoJS.enc.Utf8
   );

@@ -12,6 +12,7 @@ function connectMongoDb() {
     })
     .catch((error) => {
       logger.error(`Database Error occured ${error}`);
+      throw new Error(`Database Connection Error: ${error.message}`);
     });
 }
 

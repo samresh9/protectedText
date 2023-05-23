@@ -11,6 +11,13 @@ const {
 const { connectMongoDb } = require("./connection");
 const noteRoutes = require("./routes/notesRoutes");
 const logger = require("./log/logger").child({ filename: __filename });
+const {
+  unhandledRejections,
+  uncaughtException,
+} = require("./utils/handleExceptionAndRejections");
+// handle uncaught exception and rejections
+unhandledRejections();
+uncaughtException();
 
 const app = express();
 const PORT = process.env.PORT || 7000;
@@ -47,6 +54,7 @@ app.get("/error", (_req, _res) => {
 
 app.use(handleNotFound);
 app.use(handle500Error);
+
 (async () => {
   try {
     await connectMongoDb();
@@ -54,6 +62,6 @@ app.use(handle500Error);
       logger.info(`Server started at port ${PORT}`);
     });
   } catch (Err) {
-    logger.info("Database Connection Error:", Err);
+    logger.error("Database Connection Error:", Err);
   }
 })();

@@ -9,7 +9,7 @@ async function connectMongoDb() {
     await mongoose.connect(dbConnection.url);
     logger.info("Databsase Connected");
   } catch (error) {
-    logger.error(`Database Error occured ${error}`);
+    logger.error("databse error occured", error);
     throw new Error(error.message);
   }
 }

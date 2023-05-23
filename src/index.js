@@ -14,8 +14,6 @@ const logger = require("./log/logger").child({ filename: __filename });
 
 const app = express();
 const PORT = process.env.PORT || 7000;
-// db Connection
-connectMongoDb();
 // Create a file to store httplog from morgan
 const httpLogs = fs.createWriteStream(path.join(__dirname, "httpMorgan.log"), {
   flags: "a",
@@ -49,7 +47,13 @@ app.get("/error", (_req, _res) => {
 
 app.use(handleNotFound);
 app.use(handle500Error);
-
-app.listen(PORT, () => {
-  logger.info(`Server started at port ${PORT}`);
-});
+(async () => {
+  try {
+    await connectMongoDb();
+    app.listen(PORT, () => {
+      logger.info(`Server started at port ${PORT}`);
+    });
+  } catch (Err) {
+    logger.info("Database Connection Error:", Err);
+  }
+})();

@@ -1,19 +1,21 @@
 const handleNotFound = (req, res, next) => {
   const error = new Error(`Not Found ${req.method} ${req.originalUrl}`);
-  error.statusCode = 404;
+  res.statusCode = 404;
   next(error);
 };
 
-const handle500Error = (error, req, res, next) => {
-  const statusCode = error.statusCode || 500;
+const handle500Error = (error, req, res, _next) => {
+  const statusCode = res.statusCode < 400 ? 500 : res.statusCode;
   res.status(statusCode);
   res.json({
-    message: error.message,
+    message:
+      process.env.NODE_ENV === "development"
+        ? error.message
+        : "something went wrong",
     statusCode,
     stackTrace:
       process.env.NODE_ENV === "development" ? error.stack : undefined,
   });
-  next();
 };
 
 module.exports = {

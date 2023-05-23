@@ -8,16 +8,13 @@ const {
 
 const router = express.Router();
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const noteID = req.params.id;
     const noteData = await Note.findOne({ noteId: noteID });
-    if (!noteData) {
-      return res.json({ have_noteId: false, newUser: true });
-    }
     return res.json({ noteID: noteData.noteId, content: noteData.content });
   } catch (err) {
-    return res.status(500).json(err.message);
+    return next(err);
   }
 });
 
@@ -25,7 +22,7 @@ router.post(
   "/",
   userDataValidateChain,
   handleValidationErrors,
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       const { noteId, content } = req.body;
       const checkData = await Note.findOne({ noteId });
@@ -35,7 +32,7 @@ router.post(
       const noteData = await Note.create({ noteId, content });
       return res.json({ noteID: noteData.noteId, content: noteData.content });
     } catch (err) {
-      return res.status(500).json(err.message);
+      return next(err);
     }
   }
 );
@@ -44,7 +41,7 @@ router.put(
   "/",
   userDataValidateChain,
   handleValidationErrors,
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       const { noteId, content } = req.body;
       const errors = validationResult(req);
@@ -59,9 +56,12 @@ router.put(
       if (!updatedData) {
         return res.status(400).json({ error: "Invalid noteId " });
       }
-      return res.json({ updatedData });
+      return res.json({
+        noteID: updatedData.noteId,
+        content: updatedData.content,
+      });
     } catch (err) {
-      return res.status(500).json(err.message);
+      return next(err);
     }
   }
 );

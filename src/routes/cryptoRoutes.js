@@ -1,8 +1,17 @@
 const express = require("express");
-const { encryptData, decryptData } = require("../utils/encryptDecryptHandler");
+const {
+  encryptData,
+  decryptData,
+  hashData,
+} = require("../utils/encryptDecryptHandler");
 const logger = require("../log/logger");
 
 const router = express.Router();
+router.post("/hash", (req, res) => {
+  const { note, secretKey } = req.body;
+  const initHashContent = hashData(note, secretKey);
+  res.json({ initHashContent });
+});
 router.post("/encrypt", (req, res) => {
   try {
     const { note, secretKey } = req.body;

@@ -11,6 +11,10 @@ const noteSchema = new mongoose.Schema(
       type: String,
       required: [true, "A note content is required"],
     },
+    hashContent: {
+      type: String,
+      required: [true, "A hash content is required"],
+    },
   },
   { timestamps: true }
 );

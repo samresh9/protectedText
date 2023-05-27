@@ -1,6 +1,8 @@
 const express = require("express");
 const Note = require("../models/notesModel");
-const userDataValidateChain = require("../validations/notesRoutesValidations");
+const {
+  userDataValidateChain,
+} = require("../validations/notesRoutesValidations");
 const {
   handleValidationErrors,
 } = require("../middlewares/validationErrorsHandlerMiddleware");
@@ -23,16 +25,15 @@ router.get("/:id", async (req, res, next) => {
 
 router.post(
   "/",
-  userDataValidateChain,
-  handleValidationErrors,
+  handleValidationErrors(userDataValidateChain),
   async (req, res, next) => {
     try {
       const { noteId, content, hashContent } = req.body;
       const existingSite = await Note.findOne({ noteId });
+      if (existingSite?.hashContent === hashContent) {
+        return res.json({ changeInData: "false" });
+      }
       if (existingSite) {
-        if (existingSite.hashContent === hashContent) {
-          return res.json({ changeInData: "false" });
-        }
         existingSite.hashContent = hashContent;
         existingSite.content = content;
         await existingSite.save();

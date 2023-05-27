@@ -12,13 +12,12 @@ const { connectMongoDb } = require("./connection");
 const noteRoutes = require("./routes/notesRoutes");
 const logger = require("./log/logger").child({ filename: __filename });
 const {
-  unhandledRejections,
-  uncaughtException,
+  unhandledRejectionsHandler,
+  uncaughtExceptionHandler,
 } = require("./utils/handleExceptionAndRejections");
 // handle uncaught exception and rejections
-unhandledRejections();
-uncaughtException();
-
+process.on("uncaughtException", uncaughtExceptionHandler);
+process.on("uncaughtRejection", unhandledRejectionsHandler);
 const app = express();
 const PORT = process.env.PORT || 7000;
 // Create a file to store httplog from morgan

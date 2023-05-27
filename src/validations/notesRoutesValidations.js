@@ -6,4 +6,4 @@ const userDataValidateChain = [
   body("hashContent").notEmpty().withMessage("Hash Content is required"),
 ];
 
-module.exports = userDataValidateChain;
+module.exports = { userDataValidateChain };

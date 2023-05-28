@@ -4,39 +4,26 @@ const {
   decryptData,
   hashData,
 } = require("../utils/encryptDecryptHandler");
-const logger = require("../log/logger");
+const {
+  encryptSchema,
+  decryptSchema,
+} = require("../validations/notesRoutesValidations");
+const {
+  schemaValidator,
+} = require("../middlewares/validationErrorsHandlerMiddleware");
 
 const router = express.Router();
-router.post("/hash", (req, res) => {
-  const { note, secretKey } = req.body;
-  const initHashContent = hashData(note, secretKey);
-  res.json({ initHashContent });
-});
-router.post("/encrypt", (req, res) => {
-  try {
-    const { note, secretKey } = req.body;
-    if (!note) {
-      throw new Error("Note is required");
-    }
-    const encryptedData = encryptData(note, secretKey);
-    res.json({ encryptedData });
-  } catch (err) {
-    logger.error(` Inside cryptoRoutes ,Message:-${err.message}`);
-    res.status(400).json({ error: err.message });
-  }
+
+router.post("/encrypt", schemaValidator(encryptSchema), (req, res) => {
+  const { content, secretKey } = req.body;
+  const encryptedContent = encryptData(content, secretKey);
+  const hashContent = hashData(content, secretKey);
+  return res.json({ encryptedContent, hashContent });
 });
 
-router.post("/decrypt", (req, res) => {
-  try {
-    const { encryptedData, secretKey } = req.body;
-    if (!encryptedData) {
-      throw new Error("Data is required");
-    }
-    const note = decryptData(encryptedData, secretKey);
-    res.json({ note });
-  } catch (err) {
-    logger.error(err.stack);
-    res.status(400).json({ error: err.message });
-  }
+router.post("/decrypt", schemaValidator(decryptSchema), (req, res) => {
+  const { encryptedContent, secretKey } = req.body;
+  const content = decryptData(encryptedContent, secretKey);
+  res.json({ decryptedData: content });
 });
 module.exports = router;

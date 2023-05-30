@@ -1,6 +1,6 @@
 const { body } = require("express-validator");
 
-const saveSchema = [
+const noteSchema = [
   body("noteId").notEmpty().withMessage("Note unique id is required"),
   body("content").notEmpty().withMessage("Encrypted Content  is required"),
   body("hashContent").notEmpty().withMessage("Hash Content is required"),
@@ -14,4 +14,4 @@ const decryptSchema = [
   body("secretKey").notEmpty().withMessage("Secret Key  is required"),
 ];
 
-module.exports = { saveSchema, encryptSchema, decryptSchema };
+module.exports = { noteSchema, encryptSchema, decryptSchema };

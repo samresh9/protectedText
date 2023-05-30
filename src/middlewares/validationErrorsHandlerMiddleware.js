@@ -1,12 +1,10 @@
 const { validationResult } = require("express-validator");
 
 class ValidationError extends Error {
-  constructor(errors) {
+  constructor(message) {
     super();
-    this.message = errors.map((error) => error.msg);
+    this.message = message;
     this.name = "ValidationError";
-    this.errors = errors;
-    // this.statusCode = statusCode;
   }
 }
 
@@ -21,7 +19,8 @@ const schemaValidator = (validations) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.statusCode = 400;
-      const err = new ValidationError(errors.array());
+      const errorMessage = errors.array().map((error) => error.msg);
+      const err = new ValidationError(errorMessage);
       return next(err);
     }
     return next();

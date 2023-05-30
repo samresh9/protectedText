@@ -1,6 +1,6 @@
 const express = require("express");
 const Note = require("../models/notesModel");
-const { saveSchema } = require("../validations/notesRoutesValidations");
+const { noteSchema } = require("../validations/notesRoutesValidations");
 const {
   schemaValidator,
 } = require("../middlewares/validationErrorsHandlerMiddleware");
@@ -12,7 +12,7 @@ router.get("/:id", async (req, res, next) => {
     const noteID = req.params.id;
     const noteData = await Note.findOne({ noteId: noteID });
     if (!noteData) {
-      return res.json({ newSite: true });
+      return res.status(404).json({ errorMessage: "Url not found" });
     }
     return res.json({
       noteID: noteData.noteId,
@@ -23,7 +23,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.post("/", schemaValidator(saveSchema), async (req, res, next) => {
+router.post("/", schemaValidator(noteSchema), async (req, res, next) => {
   try {
     const { noteId, content, hashContent } = req.body;
     const existingSite = await Note.findOne({ noteId });

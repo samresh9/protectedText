@@ -10,7 +10,6 @@ const handle500Error = (error, req, res, _next) => {
   res.json({
     message: error.message,
     statusCode,
-    error,
     stackTrace: process.env.NODE_ENV === "development" ? error.stack : null,
   });
 };

@@ -48,7 +48,8 @@ app.get("/", async (req, res) => {
 });
 app.get("/error", (_req, _res) => {
   logger.info("error");
-  throw new Error("something is wrong");
+  const err = new Error("something is wrong");
+  throw err;
 });
 
 app.use(handleNotFound);

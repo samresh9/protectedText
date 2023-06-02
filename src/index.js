@@ -3,6 +3,8 @@ const express = require("express");
 const fs = require("fs");
 const morgan = require("morgan");
 const path = require("path");
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 const cryptoRoutes = require("./routes/cryptoRoutes");
 const {
   handle500Error,
@@ -15,16 +17,25 @@ const {
   unhandledRejectionsHandler,
   uncaughtExceptionHandler,
 } = require("./utils/handleExceptionAndRejections");
+const options = require("./swaggerOptions");
+
+logger.info("here");
 // handle uncaught exception and rejections
 process.on("uncaughtException", uncaughtExceptionHandler);
-process.on("uncaughtRejection", unhandledRejectionsHandler);
+process.on("unhandledRejection", unhandledRejectionsHandler);
+
 const app = express();
 const PORT = process.env.PORT || 7000;
+// swagger
+const specs = swaggerJsdoc(options);
 // Create a file to store httplog from morgan
 const httpLogs = fs.createWriteStream(path.join(__dirname, "httpMorgan.log"), {
   flags: "a",
 });
 // Creating new tokens
+app.get("/uncaught", async (_req, _res) => {
+  throw new Error("uncaught f f f");
+});
 
 morgan.token("type", (req, _res) => {
   return req.headers["Content-type"];
@@ -42,10 +53,13 @@ app.use(
 app.use("/api/notes/", noteRoutes);
 app.use("/crypto", cryptoRoutes);
 
-app.get("/", async (req, res) => {
-  logger.info("Inside home");
-  res.send("Protected Text");
-});
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs, {
+    explorer: true,
+  })
+);
 app.get("/error", (_req, _res) => {
   logger.info("error");
   const err = new Error("something is wrong");

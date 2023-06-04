@@ -12,10 +12,9 @@ router.get("/:id", async (req, res, next) => {
     const noteID = req.params.id;
     const noteData = await Note.findOne({ noteId: noteID });
     if (!noteData) {
-      return res
-        .status(404)
-        .json({ errorMessage: `Not Found ${req.method} ${req.originalUrl}` });
+      return next();
     }
+
     return res.json({
       noteID: noteData.noteId,
       content: noteData.content,

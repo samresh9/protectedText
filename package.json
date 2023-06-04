@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": " node src/index.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon --inspect-brk  src/index.js",
+    "dev": "nodemon --inspect-brk src/index.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon --inspect-brk src/index.js",
     "start:prod": "cross-env NODE_ENV=production nodemon --inspect-brk  src/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix ",

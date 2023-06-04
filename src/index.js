@@ -61,7 +61,7 @@ app.use(handle500Error);
     app.listen(PORT, () => {
       logger.info(`Server started at port ${PORT}`);
     });
-  } catch (Err) {
-    logger.error("Database Connection Error:", Err);
+  } catch (err) {
+    logger.error("Database Connection Error:", err);
   }
 })();

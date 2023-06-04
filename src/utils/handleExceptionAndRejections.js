@@ -6,7 +6,6 @@ const unhandledRejectionsHandler = (err) => {
 };
 
 const uncaughtExceptionHandler = (err) => {
-  logger.error(err.message);
   logger.error("Uncaught exception shutting down", { message: err.message });
   process.exit(1);
 };

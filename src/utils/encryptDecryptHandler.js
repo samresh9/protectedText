@@ -1,7 +1,7 @@
 const CryptoJS = require("crypto-js");
 
-function encryptData(data, secretKey) {
-  const cipherText = CryptoJS.AES.encrypt(data, secretKey).toString();
+function encryptData(note, secretKey) {
+  const cipherText = CryptoJS.AES.encrypt(note, secretKey).toString();
   return cipherText;
 }
 function decryptData(encryptedData, secretKey) {
@@ -10,7 +10,12 @@ function decryptData(encryptedData, secretKey) {
   );
   return plainText;
 }
+function hashData(note, secretKey) {
+  const hashText = CryptoJS.SHA512(note, secretKey).toString();
+  return hashText;
+}
 module.exports = {
   encryptData,
   decryptData,
+  hashData,
 };

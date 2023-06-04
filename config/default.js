@@ -5,4 +5,7 @@ module.exports = {
     prettyPrint: true,
     destination: "console",
   },
+  db: {
+    url: process.env.MONGO_CONNECTION_URI,
+  },
 };

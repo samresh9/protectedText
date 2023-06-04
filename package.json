@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": " node index.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon --inspect-brk  index.js",
-    "start:prod": "cross-env NODE_ENV=production nodemon --inspect-brk  index.js",
+    "start": " node src/index.js",
+    "dev": "nodemon --inspect-brk src/index.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon --inspect-brk src/index.js",
+    "start:prod": "cross-env NODE_ENV=production nodemon --inspect-brk  src/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix ",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -27,6 +28,7 @@
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-validator": "^7.0.1",
     "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
     "winston": "^3.8.2"

@@ -8,9 +8,18 @@ const {
   handle500Error,
   handleNotFound,
 } = require("./middlewares/handleErrorsMiddleware");
+const { connectMongoDb } = require("./connection");
+const noteRoutes = require("./routes/notesRoutes");
 const logger = require("./log/logger").child({ filename: __filename });
-
+const {
+  unhandledRejectionsHandler,
+  uncaughtExceptionHandler,
+} = require("./utils/handleExceptionAndRejections");
+// handle uncaught exception and rejections
+process.on("uncaughtException", uncaughtExceptionHandler);
+process.on("uncaughtRejection", unhandledRejectionsHandler);
 const app = express();
+const PORT = process.env.PORT || 7000;
 // Create a file to store httplog from morgan
 const httpLogs = fs.createWriteStream(path.join(__dirname, "httpMorgan.log"), {
   flags: "a",
@@ -29,29 +38,30 @@ app.use(
     { stream: httpLogs }
   )
 );
-const PORT = process.env.PORT || 7000;
-const { connectMongoDb } = require("./connection");
 
-connectMongoDb("mongodb://localhost:27017/protectedTextDB")
-  .then(() => {
-    logger.info("database connected");
-  })
-  .catch((err) => {
-    logger.error(`error occured ${err}`);
-  });
+app.use("/api/notes/", noteRoutes);
 app.use("/crypto", cryptoRoutes);
-app.get("/", (req, res) => {
+
+app.get("/", async (req, res) => {
   logger.info("Inside home");
-  res.send("hello");
+  res.send("Protected Text");
 });
 app.get("/error", (_req, _res) => {
   logger.info("error");
-  throw new Error("something is wrong");
+  const err = new Error("something is wrong");
+  throw err;
 });
 
 app.use(handleNotFound);
 app.use(handle500Error);
 
-app.listen(PORT, () => {
-  logger.info(`Server started at port ${PORT}`);
-});
+(async () => {
+  try {
+    await connectMongoDb();
+    app.listen(PORT, () => {
+      logger.info(`Server started at port ${PORT}`);
+    });
+  } catch (err) {
+    logger.error("Database Connection Error:", err);
+  }
+})();

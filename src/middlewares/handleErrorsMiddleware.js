@@ -1,6 +1,9 @@
+const config = require("config");
+
+const errorCode = config.get("errorsCodes");
 const handleNotFound = (req, res, next) => {
   const error = new Error(`Not Found ${req.method} ${req.originalUrl}`);
-  error.code = "NOT_FOUND";
+  error.code = errorCode.notFound;
   res.statusCode = 404;
   next(error);
 };

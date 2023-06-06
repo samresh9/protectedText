@@ -1,12 +1,14 @@
 const { validationResult } = require("express-validator");
+const config = require("config");
 
+const errorCode = config.get("errorsCodes");
 class ValidationError extends Error {
   constructor(message, errors) {
     super();
     // this.message = message;
     this.message = message;
     this.errors = errors;
-    this.code = "VALIDATION_ERROR";
+    this.code = errorCode.validationError;
   }
 }
 

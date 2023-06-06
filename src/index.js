@@ -60,10 +60,8 @@ app.use(
     explorer: true,
   })
 );
-app.get("/error", (_req, _res) => {
-  logger.info("error");
-  const err = new Error("something is wrong");
-  throw err;
+app.get("/", (_req, res) => {
+  res.redirect("/api-docs");
 });
 
 app.use(handleNotFound);

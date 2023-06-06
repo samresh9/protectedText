@@ -8,4 +8,8 @@ module.exports = {
   db: {
     url: process.env.MONGO_CONNECTION_URI,
   },
+  errorsCodes: {
+    validationError: "VALIDATION_ERROR",
+    notFound: "NOT_FOUND",
+  },
 };

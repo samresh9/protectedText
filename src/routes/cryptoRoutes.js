@@ -15,8 +15,8 @@
  *           type: string
  *           description: The password of the site provided by the user
  *       example:
- *         content: NThe ew Turing Omnibus
- *         secretKey: Alexander K. Dewdney
+ *         content: This is a example
+ *         secretKey: secretKey
  *     Decrypt:
  *       type: object
  *       required:
@@ -32,6 +32,14 @@
  *   responses:
  *     404:
  *       description: The note is not found
+ *     InternalServerError:
+ *       description: Internal Server Error
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: "#/components/schemas/InternalServerError"
+ *           example:
+ *             message: <Message From Error>
  */
 /**
  * @swagger
@@ -62,25 +70,43 @@
  *             schema:
  *               type: object
  *               properties:
- *                 encryptedContent:
- *                   type: string
- *                 hashContent:
- *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     content:
+ *                       type: object
+ *                       properties:
+ *                         encrypted:
+ *                           type: string
+ *                           description: The encrypted content of given plain content.
+ *                         hash:
+ *                           type: string
+ *                           description: The hash value of the given content and secretKey.
+ *                         decrypted:
+ *                           type: null
+ *                           description: This value is null.
  *             example:
- *               encryptedContent: U2FsdGVkX1804hyR1YLCzUxbN0oIZn/4dHoQgh0uV1QTOFag62NWS6zM6PCkIsLb
- *               hashContent: 3fb303c89207ddbfbf71fb4299fe6374d7adb298d56f43e5d2e1760b2dd1b00b27f16d3e39ebde4ca23109e9dd158b84e1a03bbba0c1b4a7fb586e3e0e6e6918
+ *               data:
+ *                 content:
+ *                   encrypted: U2FsdGVkX1804hyR1YLCzUxbN0oIZn/4dHoQgh0uV1QTOFag62NWS6zM6PCkIsLb
+ *                   hash: 3fb303c89207ddbfbf71fb4299fe6374d7adb298d56f43e5d2e1760b2dd1b00b27f16d3e39ebde4ca23109e9dd158b84e1a03bbba0c1b4a7fb586e3e0e6e6918
+ *                   decrypted: null
  *       400:
  *         description: Validation Error
  *         content:
  *           application/json:
  *             schema:
- *               $ref: "#/components/schemas/Error"
+ *               $ref: "#/components/schemas/BadRequestError"
  *             example:
- *               message: Content is required
- *               statusCode: 400
- *               stackTrae: Null
+ *               message: Secret Key  is required
+ *               code: VALIDATION_ERROR
+ *               errors:
+ *                 - type: "field"
+ *                   msg: "Secret Key is required"
+ *                   path: "encryptedContent"
+ *                   location: "body"
  *       500:
- *         description: Internal Server Error
+ *         $ref: "#/components/responses/InternalServerError"
  */
 /**
  * @swagger
@@ -105,21 +131,47 @@
  *             schema:
  *               type: object
  *               properties:
- *                 decryptedContent: adfasdfasfd
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     content:
+ *                       type: object
+ *                       properties:
+ *                         encrypted:
+ *                           type: null
+ *                           description: The encrypted content is null.
+ *                         hash:
+ *                           type: string
+ *                           description: The hash value is null.
+ *                         decrypted:
+ *                           type: string
+ *                           description: This value is null.
  *             example:
- *               decryptedContent: this is an example
+ *               data:
+ *                 content:
+ *                   encrypted: null
+ *                   hash: null
+ *                   decrypted: This is an example
  *       400:
  *         description: Validation Error
  *         content:
  *           application/json:
  *             schema:
- *               $ref : "#/components/schemas/Error"
+ *               $ref : "#/components/schemas/BadRequestError"
  *             example:
  *               message: Secret Key  is required
- *               statusCode: 400
- *               stackTrae: Null
+ *               code: Validation Error
+ *               errors:
+ *                 - type: "field"
+ *                   msg: "Encrypted Data id required"
+ *                   path: "encryptedContent"
+ *                   location: "body"
+ *                 - type: "field"
+ *                   msg: "Secret Key is required"
+ *                   path: "secretKey"
+ *                   location: "body"
  *       500:
- *         description: Internal Server Error
+ *         $ref: "#/components/responses/InternalServerError"
  */
 
 const express = require("express");
@@ -141,13 +193,29 @@ const router = express.Router();
 router.post("/encrypt", schemaValidator(encryptSchema), (req, res) => {
   const { content, secretKey } = req.body;
   const encryptedContent = encryptData(content, secretKey);
-  const hashContent = hashData(content, secretKey);
-  return res.json({ encryptedContent, hashContent });
+  const hash = hashData(content, secretKey);
+  return res.json({
+    data: {
+      content: {
+        encrypted: encryptedContent,
+        hash,
+        decrypted: null,
+      },
+    },
+  });
 });
 
 router.post("/decrypt", schemaValidator(decryptSchema), (req, res) => {
   const { encryptedContent, secretKey } = req.body;
   const content = decryptData(encryptedContent, secretKey);
-  res.json({ decryptedContent: content });
+  res.json({
+    data: {
+      content: {
+        encrypted: null,
+        hash: null,
+        decrypted: content,
+      },
+    },
+  });
 });
 module.exports = router;

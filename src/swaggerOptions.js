@@ -9,12 +9,8 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:7000",
+        url: process.env.SERVER_URL || "http://localhost:7000",
         description: "Development",
-      },
-      {
-        url: process.env.SERVER_URL,
-        description: "Production",
       },
     ],
   },

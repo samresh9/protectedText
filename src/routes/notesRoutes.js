@@ -9,72 +9,102 @@
  *         - content
  *         - hashContent
  *       properties:
- *         noteId:
+ *         id:
  *           type: string
  *           description: The unique ID that represents the URL
  *           uniqueItems: true
- *         content:
+ *         encryptedContent:
  *           type: string
  *           description: The encrypted content provided by the user
- *         hashContent:
+ *         hash:
  *           type: string
  *           description: The hash of the content provided by the user
  *       example:
- *         noteId: samresh
- *         content: U2FsdGVkX1804hyR1YLCzUxbN0oIZn/4dHoQgh0uV1QTOFag62NWS6zM6PCkIsLb
- *         hashContent: 3fb303c89207ddbfbf71fb4299fe6374d7adb298d56f43e5d2e1760b2dd1b00b27f16d3e39ebde4ca23109e9dd158b84e1a03bbba0c1b4a7fb586e3e0e6e6918
- *     Error:
+ *         id: samresh
+ *         encryptedContent: U2FsdGVkX1804hyR1YLCzUxbN0oIZn/4dHoQgh0uV1QTOFag62NWS6zM6PCkIsLb
+ *         hash: 3fb303c89207ddbfbf71fb4299fe6374d7adb298d56f43e5d2e1760b2dd1b00b27f16d3e39ebde4ca23109e9dd158b84e1a03bbba0c1b4a7fb586e3e0e6e6918
+ *     BadRequestError:
  *       type: object
  *       properties:
  *         message:
  *           type: string
- *           description: Error Message with Method and Route
- *         statusCode:
+ *           description: Error Message
+ *         code:
  *           type: number
- *           description: Status Code
- *         stackTrace:
- *           type: string
- *           description: Error Stack Trace
- *     NewNoteResponse:
+ *           description: Specific Error Code
+ *         errors:
+ *           type: array
+ *           description: Description Of Error
+ *           items:
+ *             type: object
+ *             properties:
+ *               type:
+ *                 type: string
+ *                 description: Type of error
+ *               msg:
+ *                 type: string
+ *                 description: Error message
+ *               path:
+ *                 type: string
+ *                 description: Path of the field with the error
+ *               location:
+ *                 type: string
+ *                 description: Location of the error (e.g., body, query, path, etc.)
+ *     InternalServerError:
+ *       type: object
+ *       properties:
+ *         message:
+ *          type: string
+ *          description: Error Message
+ *       example:
+ *         message: Message of Error
+ *     NoteResponse:
  *       type: object
  *       required:
  *         - noteId
  *         - content
  *       properties:
- *         noteId:
- *           type: string
- *           description: The unique ID that represents the URL
- *           uniqueItems: true
- *         content:
- *           type: string
- *           description: The encrypted content provided by the user
- *     UpdateNoteResponse:
- *       type: object
- *       required:
- *         - noteId
- *         - content
- *       properties:
+ *         new:
+ *           type: boolean
+ *           description: The value indicates either note is new or not
  *         updated:
  *           type: boolean
- *           description: Indicates if the note was updated successfully
- *         updatedData:
+ *           description: The encrypted content provided by the user
+ *         data:
  *           type: object
  *           properties:
- *             noteId:
+ *             id:
  *               type: string
- *               description: This is any unique id that represents the URL
- *               uniqueItems: true
+ *               description: The unique note ID
  *             content:
- *               type: string
- *               description: The encrypted content provided by the user
- *     NoChangeInNoteResponse:
+ *               type: object
+ *               description: The  content
+ *               properties:
+ *                 encrypted:
+ *                   type: string
+ *                   description: The encrypted content
+ *                 decrypted:
+ *                   type: null
+ *                   description: This value is null
+ *     GetByIdResponse:
  *       type: object
- *       required:
- *         -changeInData
  *       properties:
- *         changeInData:
- *           type: boolean
- *           description: Indicates that there was no change in the given Data
+ *         data:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: string
+ *               description: The unique note ID
+ *             content:
+ *               type: object
+ *               description: The  content
+ *               properties:
+ *                 encrypted:
+ *                   type: string
+ *                   description: The encrypted content
+ *                 decrypted:
+ *                   type: null
+ *                   description: This value is null
  */
 
 /**
@@ -105,49 +135,64 @@
  *         content:
  *           application/json:
  *             schema:
- *               oneOf:
- *                 - $ref: '#/components/schemas/NewNoteResponse'
- *                 - $ref: '#/components/schemas/UpdateNoteResponse'
- *                 - $ref: '#/components/schemas/NoChangeInNoteResponse'
+ *               $ref: '#/components/schemas/NoteResponse'
  *             examples:
  *               NewNoteExample:
  *                 value:
- *                   noteId: samresh
- *                   content: U2FsdGVkX1804hyR1YLCzUxbN0oIZn/4dHoQgh0uV1QTOFag62NWS6zM6PCkIsLb
+ *                   new: true
+ *                   updated: false
+ *                   data:
+ *                     id: samresh
+ *                     content:
+ *                       encrypted: U2FsdGVkX1804hyR1YLCzUxbN0oIZn/4dHoQgh0uV1QTOFag62NWS6zM6PCkIsLb
+ *                       decrypted: null
  *                 summary: Example response for new note
  *               UpdateNoteExample:
  *                 value:
+ *                   new: false
  *                   updated: true
- *                   updatedData:
- *                     noteId: samresh
- *                     content: U2FsdGVkX1804hyR1YLCzUxbN0oIZn/4dHoQgh0uV1QTOFag62NWS6zM6PCkIsLb
+ *                   data:
+ *                     id: samresh
+ *                     content:
+ *                       encrypted: U2FsdGVkX1804hyR1YLCzUxbN0oIZn/4dHoQgh0uV1QTOFag62NWS6zM6PCkIsLb
+ *                       decrypted: null
  *                 summary: Example response for update note
  *               NoChangeInNoteExample:
  *                 value:
- *                   changeInData: false
+ *                   new: false
+ *                   updated: false
+ *                   data:
+ *                     id: samresh
+ *                     content:
+ *                       encrypted: U2FsdGVkX1804hyR1YLCzUxbN0oIZn/4dHoQgh0uV1QTOFag62NWS6zM6PCkIsLb
+ *                       decrypted: null
  *                 summary: Example response for no change in existing note
  *       400:
  *         description: Validation Error
  *         content:
  *           application/json:
  *             schema:
- *               $ref : '#/components/schemas/Error'
+ *               $ref : '#/components/schemas/BadRequestError'
  *             example:
- *               message: noteId is required
- *               statusCode: 400
- *               stackTrae: null
+ *               message: Note unique id is required
+ *               code: VALIDATION_ERROR
+ *               errors:
+ *                 - type: "field"
+ *                   msg: "Note unique id is required"
+ *                   path: "id"
+ *                   location: "body"
  *       500:
- *         description: Internal Server Error
+ *         $ref : '#/components/responses/InternalServerError'
  */
 /**
  * @swagger
- * /api/notes/{noteId}:
+ * /api/notes/{id}:
  *   get:
  *     summary: Get the content by note ID
  *     tags: [Notes]
  *     parameters:
  *       - in: path
- *         name: noteId
+ *         name: id
  *         schema:
  *           type: string
  *         required: true
@@ -158,30 +203,25 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 noteId:
- *                   type: string
- *                   description: The unique noteId that gives the URL
+ *               $ref : "#/components/schemas/GetByIdResponse"
+ *             example:
+ *               data:
+ *                 id: samresh
  *                 content:
- *                   type: string
- *                   description: The encrypted content from the NoteId
- *               example:
- *                 noteId: Samresh
- *                 content: U2FsdGVkX1804hyR1YLCzUxbN0oIZn/4dHoQgh0uV1QTOFag62NWS6zM6PCkIsLb
+ *                   encrypted: U2FsdGVkX1804hyR1YLCzUxbN0oIZn/4dHoQgh0uV1QTOFag62NWS6zM6PCkIsLb
+ *                   decrypted: null
  *       404:
  *         description: Not Found
  *         content:
  *           application/json:
  *             schema:
- *               $ref : "#/components/schemas/Error"
+ *               $ref : "#/components/schemas/BadRequestError"
  *             example:
  *               message: Not Found GET /api/notes/dfasfd
- *               statusCode: 404
- *               stackTrae: null
+ *               code: NOT_FOUND
  *
  *       500:
- *         description: Internal Server Error
+ *         $ref: "#/components/responses/InternalServerError"
  */
 
 const express = require("express");
@@ -195,15 +235,20 @@ const router = express.Router();
 
 router.get("/:id", async (req, res, next) => {
   try {
-    const noteId = req.params.id;
-    const noteData = await Note.findOne({ noteId });
+    const { id } = req.params;
+    const noteData = await Note.findOne({ id });
     if (!noteData) {
       return next();
     }
 
     return res.json({
-      noteId: noteData.noteId,
-      content: noteData.content,
+      data: {
+        id: noteData.id,
+        content: {
+          encrypted: noteData.encryptedContent,
+          decrypted: null,
+        },
+      },
     });
   } catch (err) {
     return next(err);
@@ -212,29 +257,53 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/", schemaValidator(noteSchema), async (req, res, next) => {
   try {
-    const { noteId, content, hashContent } = req.body;
-    const existingSite = await Note.findOne({ noteId });
-    if (existingSite?.hashContent === hashContent) {
-      return res.json({ changeInData: "false" });
+    const { id, encryptedContent, hash } = req.body;
+    const existingSite = await Note.findOne({ id });
+    if (existingSite?.hash === hash) {
+      return res.json({
+        new: false,
+        updated: false,
+        data: {
+          id: existingSite.id,
+          content: {
+            encrypted: existingSite.encryptedContent,
+            decrypted: null,
+          },
+        },
+      });
     }
     if (existingSite) {
-      existingSite.hashContent = hashContent;
-      existingSite.content = content;
+      existingSite.hashContent = hash;
+      existingSite.content = encryptedContent;
       await existingSite.save();
       return res.json({
-        updated: "true",
-        updatedData: {
-          noteID: existingSite.noteId,
-          content: existingSite.content,
+        new: false,
+        updated: true,
+        data: {
+          id: existingSite.id,
+          content: {
+            encrypted: existingSite.encryptedContent,
+            decrypted: null,
+          },
         },
       });
     }
     const noteData = await Note.create({
-      noteId,
-      content,
-      hashContent,
+      id,
+      encryptedContent,
+      hash,
     });
-    return res.json({ noteID: noteData.noteId, content: noteData.content });
+    return res.json({
+      new: true,
+      updated: false,
+      data: {
+        id: noteData.id,
+        content: {
+          encrypted: noteData.encryptedContent,
+          decrypted: null,
+        },
+      },
+    });
   } catch (err) {
     return next(err);
   }

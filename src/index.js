@@ -18,8 +18,6 @@ const {
   uncaughtExceptionHandler,
 } = require("./utils/handleExceptionAndRejections");
 const options = require("./swaggerOptions");
-
-logger.info("here");
 // handle uncaught exception and rejections
 process.on("uncaughtException", uncaughtExceptionHandler);
 process.on("unhandledRejection", unhandledRejectionsHandler);

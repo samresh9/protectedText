@@ -10,20 +10,21 @@ module.exports = {
     ecmaVersion: "latest",
   },
   rules: {
-    "linebreak-style": 0,
-    "eol-last": ["warn", "always"],
-    "no-console": "error",
-    "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-    quotes: [
-      "error",
-      "double",
-      { avoidEscape: true, allowTemplateLiterals: true },
-    ],
     "prettier/prettier": [
       "error",
       {
         endOfLine: "auto",
       },
+    ],
+    "linebreak-style": 0,
+    "eol-last": ["warn", "always"],
+    "no-console": "error",
+    "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    "no-underscore-dangle": ["error", { allow: ["_id"] }],
+    quotes: [
+      "error",
+      "double",
+      { avoidEscape: true, allowTemplateLiterals: true },
     ],
   },
 };

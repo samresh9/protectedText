@@ -24,7 +24,7 @@ const migrateData = async () => {
     await Note.createIndexes();
     logger.info("Data migration success");
   } catch (error) {
-    logger.error("errror occur", error);
+    logger.error("errror occur", { error });
     throw new Error(error.message);
   }
 };

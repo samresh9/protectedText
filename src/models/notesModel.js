@@ -2,18 +2,18 @@ const mongoose = require("mongoose");
 
 const noteSchema = new mongoose.Schema(
   {
-    noteId: {
+    id: {
       type: String,
       required: [true, "A note ID is required"],
       unique: true,
     },
-    content: {
+    encryptedContent: {
       type: String,
       required: [true, "A note content is required"],
     },
-    hashContent: {
+    hash: {
       type: String,
-      required: [true, "A hash content is required"],
+      required: [true, "A hash of content is required"],
     },
   },
   { timestamps: true }

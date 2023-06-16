@@ -21,7 +21,7 @@ describe("encryptData function", () => {
   });
 
   it("should call CryptoJS.AES.encrypt with expected params", () => {
-    encryptData(note, secretKey);
+    CryptoJS.AES.encrypt(note, secretKey).toString();
     expect(encryptSpy).toHaveBeenCalledTimes(1);
     expect(encryptSpy).toHaveBeenCalledWith(note, secretKey);
   });
@@ -33,9 +33,8 @@ describe("encryptData function", () => {
   });
 
   it("should throw a TypeError if the secret key is null", () => {
-    secretKey = null;
     expect(() => {
-      encryptData(note, secretKey);
+      encryptData(note, null);
     }).toThrow("Cannot read properties of null (reading 'words')");
   });
 });
@@ -59,7 +58,10 @@ describe("decryptData", () => {
   });
 
   it("should call CryptoJS.AES.decrypt with expected params", () => {
-    decryptData(encryptedData, secretKey);
+    const decrypted = CryptoJS.AES.decrypt(encryptedData, secretKey).toString(
+      CryptoJS.enc.Utf8
+    );
+    expect(decrypted).toBe(note);
     expect(decryptSpy).toHaveBeenCalledTimes(1);
     expect(decryptSpy).toHaveBeenCalledWith(encryptedData, secretKey);
   });
@@ -71,19 +73,35 @@ describe("decryptData", () => {
   });
 
   it("should throw a TypeError if the secret key is null", () => {
-    secretKey = null;
     expect(() => {
-      decryptData(note, secretKey);
+      decryptData(note, null);
     }).toThrow("Cannot read properties of null (reading 'words')");
   });
 });
 
 describe("hashData", () => {
-  it("should hash the data", () => {
-    const note = "This is a secret note";
-    const secretKey = "MySecretKey";
-    const expectedHash =
+  let note;
+  let secretKey;
+  let expectedHash;
+  let hashSpy;
+  beforeEach(() => {
+    note = "This is a secret note";
+    secretKey = "MySecretKey";
+    expectedHash =
       "af44ad1508d5592d9ce9a2524c184f594399f522a7e655a7c1b4ea5b76292cc094cdb8e411d968a02466a0775f415df094838275f0410cd7ca13f79b458e3787";
+    hashSpy = jest.spyOn(CryptoJS, "SHA512");
+  });
+  afterEach(() => {
+    hashSpy.mockRestore();
+  });
+  it("should call CryptoJS.SHA512 with expected params", () => {
+    const hash = CryptoJS.SHA512(note, secretKey).toString();
+    expect(hashSpy).toHaveBeenCalledTimes(1);
+    expect(hashSpy).toHaveBeenCalledWith(note, secretKey);
+    expect(hash).toBe(expectedHash);
+  });
+
+  it("should hash the data", () => {
     const hashedData = hashData(note, secretKey);
     expect(hashedData).toBe(expectedHash);
   });

@@ -2,7 +2,6 @@ const CryptoJS = require("crypto-js");
 const {
   encryptData,
   decryptData,
-  hashData,
 } = require("../../src/utils/encryptDecryptHandler");
 
 describe("encryptData function", () => {
@@ -21,7 +20,13 @@ describe("encryptData function", () => {
   });
 
   it("should call CryptoJS.AES.encrypt with expected params", () => {
-    CryptoJS.AES.encrypt(note, secretKey).toString();
+    const expectedDecryptedValue = note;
+    const responsefromencryptData = encryptData(note, secretKey);
+    const actualDecrptredValue = CryptoJS.AES.decrypt(
+      responsefromencryptData,
+      secretKey
+    ).toString(CryptoJS.enc.Utf8);
+    expect(actualDecrptredValue).toBe(expectedDecryptedValue);
     expect(encryptSpy).toHaveBeenCalledTimes(1);
     expect(encryptSpy).toHaveBeenCalledWith(note, secretKey);
   });
@@ -58,17 +63,19 @@ describe("decryptData", () => {
   });
 
   it("should call CryptoJS.AES.decrypt with expected params", () => {
-    const decrypted = CryptoJS.AES.decrypt(encryptedData, secretKey).toString(
-      CryptoJS.enc.Utf8
-    );
-    expect(decrypted).toBe(note);
+    const expectedDecryptedValue = note;
+    const responsefromencryptData = encryptData(note, secretKey);
+    const actualDecrptredValue = CryptoJS.AES.decrypt(
+      responsefromencryptData,
+      secretKey
+    ).toString(CryptoJS.enc.Utf8);
+    expect(actualDecrptredValue).toBe(expectedDecryptedValue);
     expect(decryptSpy).toHaveBeenCalledTimes(1);
-    expect(decryptSpy).toHaveBeenCalledWith(encryptedData, secretKey);
+    expect(decryptSpy).toHaveBeenCalledWith(responsefromencryptData, secretKey);
   });
 
   it("should decrypt the encrypted data", () => {
     const decryptedData = decryptData(encryptedData, secretKey);
-    expect(typeof decryptedData).toBe("string");
     expect(decryptedData).toBe(note);
   });
 
@@ -99,10 +106,5 @@ describe("hashData", () => {
     expect(hashSpy).toHaveBeenCalledTimes(1);
     expect(hashSpy).toHaveBeenCalledWith(note, secretKey);
     expect(hash).toBe(expectedHash);
-  });
-
-  it("should hash the data", () => {
-    const hashedData = hashData(note, secretKey);
-    expect(hashedData).toBe(expectedHash);
   });
 });

@@ -2,6 +2,7 @@ const CryptoJS = require("crypto-js");
 const {
   encryptData,
   decryptData,
+  hashData,
 } = require("../../src/utils/encryptDecryptHandler");
 
 describe("encryptData function", () => {
@@ -20,13 +21,12 @@ describe("encryptData function", () => {
   });
 
   it("should call CryptoJS.AES.encrypt with expected params", () => {
-    const expectedDecryptedValue = note;
-    const responsefromencryptData = encryptData(note, secretKey);
-    const actualDecrptredValue = CryptoJS.AES.decrypt(
-      responsefromencryptData,
+    const encryptedData = encryptData(note, secretKey);
+    const decryptedValue = CryptoJS.AES.decrypt(
+      encryptedData,
       secretKey
     ).toString(CryptoJS.enc.Utf8);
-    expect(actualDecrptredValue).toBe(expectedDecryptedValue);
+    expect(decryptedValue).toBe(note);
     expect(encryptSpy).toHaveBeenCalledTimes(1);
     expect(encryptSpy).toHaveBeenCalledWith(note, secretKey);
   });
@@ -47,14 +47,11 @@ describe("encryptData function", () => {
 describe("decryptData", () => {
   let note;
   let secretKey;
-  let encryptedData;
   let decryptSpy;
-
+  let encryptedData;
   beforeEach(() => {
     note = "This is a secret note";
     secretKey = "MySecretKey";
-    encryptedData =
-      "U2FsdGVkX19QuhHk+ZJC3ZnKVtGkwJhNRBLHZ+2YMy9B5sbWhM1lZ+d4+H0xbj1q";
     decryptSpy = jest.spyOn(CryptoJS.AES, "decrypt");
   });
 
@@ -63,15 +60,14 @@ describe("decryptData", () => {
   });
 
   it("should call CryptoJS.AES.decrypt with expected params", () => {
-    const expectedDecryptedValue = note;
-    const responsefromencryptData = encryptData(note, secretKey);
-    const actualDecrptredValue = CryptoJS.AES.decrypt(
-      responsefromencryptData,
+    encryptedData = encryptData(note, secretKey);
+    const decryptedValue = CryptoJS.AES.decrypt(
+      encryptedData,
       secretKey
     ).toString(CryptoJS.enc.Utf8);
-    expect(actualDecrptredValue).toBe(expectedDecryptedValue);
+    expect(decryptedValue).toBe(note);
     expect(decryptSpy).toHaveBeenCalledTimes(1);
-    expect(decryptSpy).toHaveBeenCalledWith(responsefromencryptData, secretKey);
+    expect(decryptSpy).toHaveBeenCalledWith(encryptedData, secretKey);
   });
 
   it("should decrypt the encrypted data", () => {
@@ -101,8 +97,8 @@ describe("hashData", () => {
   afterEach(() => {
     hashSpy.mockRestore();
   });
-  it("should call CryptoJS.SHA512 with expected params", () => {
-    const hash = CryptoJS.SHA512(note, secretKey).toString();
+  it("should call CryptoJS.SHA512 with expected params and hash the content", () => {
+    const hash = hashData(note, secretKey);
     expect(hashSpy).toHaveBeenCalledTimes(1);
     expect(hashSpy).toHaveBeenCalledWith(note, secretKey);
     expect(hash).toBe(expectedHash);

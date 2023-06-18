@@ -49,6 +49,7 @@ describe("decryptData", () => {
   let secretKey;
   let decryptSpy;
   let encryptedData;
+
   beforeEach(() => {
     note = "This is a secret note";
     secretKey = "MySecretKey";
@@ -87,6 +88,7 @@ describe("hashData", () => {
   let secretKey;
   let expectedHash;
   let hashSpy;
+
   beforeEach(() => {
     note = "This is a secret note";
     secretKey = "MySecretKey";
@@ -94,9 +96,11 @@ describe("hashData", () => {
       "af44ad1508d5592d9ce9a2524c184f594399f522a7e655a7c1b4ea5b76292cc094cdb8e411d968a02466a0775f415df094838275f0410cd7ca13f79b458e3787";
     hashSpy = jest.spyOn(CryptoJS, "SHA512");
   });
+
   afterEach(() => {
     hashSpy.mockRestore();
   });
+
   it("should call CryptoJS.SHA512 with expected params and hash the content", () => {
     const hash = hashData(note, secretKey);
     expect(hashSpy).toHaveBeenCalledTimes(1);

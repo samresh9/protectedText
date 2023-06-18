@@ -17,7 +17,7 @@ module.exports = {
         endOfLine: "auto",
       },
     ],
-    "linebreak-style": 0,
+    "linebreak-style": ["error", "unix"],
     "eol-last": ["warn", "always"],
     "no-console": "error",
     "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],

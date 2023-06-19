@@ -23,7 +23,7 @@ describe("Mongoose Connection", () => {
     mongoose.connect.mockResolvedValueOnce();
     await connectMongoDb();
     expect(mongoose.connect).toHaveBeenCalledWith(
-      "mongodb+srv://thapasamresh9:uyUhwgXhGsKgMRJs@cluster0.wavmwta.mongodb.net/protectedTextDB?retryWrites=true&w=majority"
+      process.env.MONGO_CONNECTION_URI
     );
     expect(loggerInfoMock).toHaveBeenCalledWith("Databsase Connected");
   });

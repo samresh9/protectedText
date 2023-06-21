@@ -94,7 +94,7 @@ describe("decryptSchema validation", () => {
     expect(errors.array()).toContainEqual({
       type: "field",
       value: undefined,
-      msg: "Encrypted Data id required",
+      msg: "Encrypted Data is required",
       path: "encryptedContent",
       location: "body",
     });

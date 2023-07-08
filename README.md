@@ -1,64 +1,81 @@
-# Protected Text
+# Turborepo starter
 
-The Api is used to store the note,to-do,texts in encrypted form using your unique id and password.
-And can access them using the id anywhere in a secure way.
+This is an official starter Turborepo.
 
-## URLs
-- Project lives at: **[protected.samresh.com.np](https://protected.samresh.com.np/)** - production (main branch)
-- Current code is deployed at [protected-dev.samresh.com.np](https://protected-dev.samresh.com.np/) - this is development code and may be unstable (develop branch)
+## Using this example
 
-## Getting Started
-To get started with this project, follow the steps below:
+Run the following command:
 
-1. Clone the repository:
-git clone https://github.com/username/repository.git
+```sh
+npx create-turbo@latest
+```
 
-2. Install dependencies:
-`npm install`
+## What's inside?
 
-3. Clone `sample.env` file at the root of your project to create `.env` file.
+This Turborepo includes the following packages/apps:
 
-4. Start the project:
-- For running in development mode :
-  ```
-  npm run start:dev
-  ```
+### Apps and Packages
 
-- For running in production mode:
-  ```
-  npm run start:prod
-  ```
+- `docs`: a [Next.js](https://nextjs.org/) app
+- `web`: another [Next.js](https://nextjs.org/) app
+- `ui`: a stub React component library shared by both `web` and `docs` applications
+- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-## API Reference
+### Utilities
 
-### Base URL
-The base URL for all API endpoints is http://localhost:7000 or https://protected.samresh.com.np
+This Turborepo has some additional tools already setup for you:
 
-### Api Documentation
-The URL for API documentation: https://protected.samresh.com.np/api-docs
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
 
+### Build
 
-## Render Deployment
+To build all apps and packages, run the following command:
 
-Our project is automatically deployed on the Render platform. When you your pull request (PR) , it will trigger an automatic deployment on Render.
+```
+cd my-turborepo
+pnpm build
+```
 
-### Git Hooks and Husky
+### Develop
 
-We utilize Husky, a Git hook tool, to enforce certain actions and maintain a consistent workflow within our project. Git hooks are scripts that run before or after specific Git events.
+To develop all apps and packages, run the following command:
 
+```
+cd my-turborepo
+pnpm dev
+```
 
+### Remote Caching
 
-- **Pre-commit Hook**: We have setup the pre-commit hook that runs code formatting scripts and linters to ensure code consistency before committing changes.
+Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
 
-Please ensure that your code meets the required standards and passes the necessary checks before committing or pushing changes.
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
 
----
+```
+cd my-turborepo
+npx turbo login
+```
 
-### Environment Variables
+This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
 
-Certain parts of our application require the presence of environment variables for proper configuration. These variables are typically stored in a `.env` file at the root of the project.
+Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
 
-Before running the project locally, make sure to create a `.env` file and you can clone the `sample.env` and fill your value accordingly. Log related configuration have default value, therefore do not require values from .env.
+```
+npx turbo link
+```
 
-All environment values are consumed at config/default.js for centralized implementation.
+## Useful Links
+
+Learn more about the power of Turborepo:
+
+- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
+- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
+- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
+- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
+- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
+- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)

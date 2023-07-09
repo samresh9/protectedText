@@ -1,6 +1,17 @@
 {
   "private": true,
+  "name": "protectedtext",
+  "packageManager": "npm@9.5.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=18.16.0 <19",
+    "npm": ">=9.5.0 <10"
+  },
   "scripts": {
+    "start:backend":"turbo run start --filter=backend",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
@@ -15,11 +26,5 @@
     "husky": "^8.0.3",
     "prettier": "^2.5.1",
     "turbo": "latest"
-  },
-  "name": "my-turborepo",
-  "packageManager": "npm@9.5.1",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  }
 }

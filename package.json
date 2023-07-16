@@ -1,7 +1,6 @@
 {
-  "name": "my-turborepo",
-  "private": true,
   "name": "protectedtext",
+  "private": true,
   "packageManager": "npm@9.5.1",
   "workspaces": [
     "apps/*",

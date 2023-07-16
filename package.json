@@ -11,7 +11,7 @@
     "npm": ">=9.5.0 <10"
   },
   "scripts": {
-    "start:backend":"turbo run start --filter=backend",
+    "start:backend": "turbo run start --filter=backend",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",

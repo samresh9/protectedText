@@ -10,9 +10,7 @@ const {
   handle500Error,
   handleNotFound,
 } = require("./middlewares/handleErrorsMiddleware");
-const { connectMongoDb } = require("./connection");
 const noteRoutes = require("./routes/notesRoutes");
-const logger = require("./log/logger").child({ filename: __filename });
 const {
   unhandledRejectionsHandler,
   uncaughtExceptionHandler,
@@ -23,7 +21,6 @@ process.on("uncaughtException", uncaughtExceptionHandler);
 process.on("unhandledRejection", unhandledRejectionsHandler);
 
 const app = express();
-const PORT = process.env.PORT || 7000;
 // swagger
 const specs = swaggerJsdoc(options);
 // Create a file to store httplog from morgan
@@ -65,13 +62,4 @@ app.get("/", (_req, res) => {
 app.use(handleNotFound);
 app.use(handle500Error);
 
-(async () => {
-  try {
-    await connectMongoDb();
-    app.listen(PORT, () => {
-      logger.info(`Server started at port ${PORT}`);
-    });
-  } catch (err) {
-    logger.error("Database Connection Error:", err);
-  }
-})();
+module.exports = app;

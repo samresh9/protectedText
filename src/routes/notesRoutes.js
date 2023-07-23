@@ -273,8 +273,8 @@ router.post("/", schemaValidator(noteSchema), async (req, res, next) => {
       });
     }
     if (existingSite) {
-      existingSite.hashContent = hash;
-      existingSite.content = encryptedContent;
+      existingSite.hash = hash;
+      existingSite.encryptedContent = encryptedContent;
       await existingSite.save();
       return res.json({
         new: false,

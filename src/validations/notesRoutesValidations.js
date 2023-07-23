@@ -12,7 +12,7 @@ const encryptSchema = [
   body("secretKey").notEmpty().withMessage("Secret Key  is required"),
 ];
 const decryptSchema = [
-  body("encryptedContent").notEmpty().withMessage("Encrypted Data id required"),
+  body("encryptedContent").notEmpty().withMessage("Encrypted Data is required"),
   body("secretKey").notEmpty().withMessage("Secret Key  is required"),
 ];
 

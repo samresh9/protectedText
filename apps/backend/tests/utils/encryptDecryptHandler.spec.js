@@ -1,9 +1,5 @@
 const CryptoJS = require("crypto-js");
-const {
-  encryptData,
-  decryptData,
-  hashData,
-} = require("../../src/utils/encryptDecryptHandler");
+const { encryptData, decryptData, hashData } = require("encrypt-handler");
 
 describe("encryptData function", () => {
   let note;

@@ -1,3 +1,4 @@
+// import CryptoJS from 'crypto-js';
 const CryptoJS = require("crypto-js");
 
 function encryptData(note, secretKey) {
@@ -14,12 +15,12 @@ function hashData(note, secretKey) {
   const hashText = CryptoJS.SHA512(note, secretKey).toString();
   return hashText;
 }
-
 module.exports = {
   encryptData,
   decryptData,
   hashData,
 };
+
 
 // import CryptoJS from "crypto-js";
 

@@ -2,9 +2,18 @@
   "name": "encrypt-handler",
   "version": "1.0.0",
   "description": "",
-  "main": "encryptDecryptHandler.js",
+  "main":"index.cjs",
   "scripts": {},
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.cjs"
+    }
+  },
+  "dependencies": {
+    "crypto-js": "^4.1.1"
+  }
 }

@@ -26,5 +26,8 @@
     "husky": "^8.0.3",
     "prettier": "^2.5.1",
     "turbo": "latest"
+  },
+  "dependencies": {
+    "encrypt-handler": "^1.0.0"
   }
 }

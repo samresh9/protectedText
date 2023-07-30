@@ -3,10 +3,10 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import encryptData  from 'encrypt-handler';
-
+  console.log(encryptData);
 function App() {
   const [count, setCount] = useState(0)
-  console.log(encryptData);
+
 //  const encryptedData= encryptData("samresh","samresh" );
   return (
     <>

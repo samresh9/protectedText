@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "start": " node src/server.js",
-    "dev": "nodemon --inspect-brk src/server.js",
+    "dev": "nodemon --inspect src/server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon --inspect-brk src/server.js",
     "start:prod": "cross-env NODE_ENV=production nodemon --inspect-brk  src/server.js",
     "lint": "eslint .",
@@ -28,16 +28,15 @@
   "homepage": "https://github.com/samresh9/protectedText#readme",
   "dependencies": {
     "config": "^3.3.9",
-    "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",
+    "encrypt-handler": "*",
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
     "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3",
-    "winston": "^3.8.2",
-    "encrypt-handler": "*"
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

@@ -5,7 +5,7 @@ const app = require("./index");
 const PORT = process.env.PORT || 7000;
 const logger = require("./log/logger").child({ filename: __filename });
 
-(async () => {
+const main = async () => {
   try {
     await connectMongoDb();
     app.listen(PORT, () => {
@@ -14,4 +14,8 @@ const logger = require("./log/logger").child({ filename: __filename });
   } catch (err) {
     logger.error("Database Connection Error:", err);
   }
+};
+
+(async () => {
+  await main();
 })();

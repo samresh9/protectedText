@@ -1,19 +1,22 @@
 {
   "name": "encrypt-handler",
   "version": "1.0.0",
-  "description": "",
-  "main":"index.cjs",
-  "scripts": {},
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "exports": {
     ".": {
-      "import": "./index.mjs",
-      "require": "./index.cjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
     }
   },
+  "scripts": {
+    "build":"unbuild"
+  },
+    "unbuild": {
+      "config": "unbuild.config.mjs"
+    },
   "dependencies": {
     "crypto-js": "^4.1.1"
+  },
+  "devDependencies": {
+    "unbuild": "^1.2.1"
   }
 }

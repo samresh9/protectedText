@@ -2,16 +2,16 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import encryptData  from 'encrypt-handler';
-
+import index  from 'encrypt-handler';
+const{encryptData , decryptData , hashData} = index
 function App() {
   const [count, setCount] = useState(0)
-  console.log(encryptData);
-//  const encryptedData= encryptData("samresh","samresh" );
+  console.log(encryptData , decryptData , hashData);
+ const encryptedData= encryptData("samresh","samresh" );
   return (
     <>
       <div>
-        {/* <h2>{encryptedData}</h2> */}
+        <h2>{encryptedData}</h2>
         <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>

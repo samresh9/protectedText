@@ -25,6 +25,8 @@ jobs:
         cache: 'npm'
     - name: Install dependencies
       run: npm ci
+    - name: Build shared package
+      run: npm run build --workspace encrypt-decrypt
     - name: Run linting
       run: npm run lint
     - name: Run tests

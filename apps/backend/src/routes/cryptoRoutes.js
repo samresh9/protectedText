@@ -175,11 +175,7 @@
  */
 
 const express = require("express");
-const {
-  encryptData,
-  decryptData,
-  hashData,
-} = require("../utils/encryptDecryptHandler");
+const { encryptData, decryptData, hashData } = require("encrypt-handler");
 const {
   encryptSchema,
   decryptSchema,

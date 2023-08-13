@@ -5,7 +5,6 @@
   ],
   "pipeline": {
     "start": {},
-    "start:backend": {},
     "build": {
       "dependsOn": [
         "^build"

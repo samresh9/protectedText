@@ -5,6 +5,11 @@
   ],
   "pipeline": {
     "start": {},
+    "backend#start": {
+      "dependsOn": [
+        "encrypt-handler#build"
+      ]
+    },
     "build": {
       "dependsOn": [
         "^build"

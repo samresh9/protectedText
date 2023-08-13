@@ -11,18 +11,19 @@
         "^build"
       ],
       "outputs": [
-        ".next/**",
-        "!.next/cache/**"
+        "dist/**"
       ]
     },
-    "lint": {
+    "lint": {},
+    "backend#lint": {
       "dependsOn": [
-        "^build"
+        "encrypt-handler#build"
       ]
     },
-    "test": {
+    "test": {},
+    "backend#test": {
       "dependsOn": [
-        "^build"
+        "encrypt-handler#build"
       ]
     },
     "dev": {

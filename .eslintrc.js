@@ -1,31 +1,17 @@
 module.exports = {
-  env: {
-    browser: true,
-    commonjs: true,
-    es2021: true,
-    jest: true,
-  },
-  extends: ["airbnb-base", "plugin:prettier/recommended"],
-  overrides: [],
+  root: true,
+  // This tells ESLint to load the config from the package `eslint-config-custom`
+  //extends: ["custom"],
   parserOptions: {
-    ecmaVersion: "latest",
-  },
-  rules: {
-    "prettier/prettier": [
-      "error",
-      {
-        endOfLine: "auto",
-      },
-    ],
-    "linebreak-style": ["error", "unix"],
-    "eol-last": ["warn", "always"],
-    "no-console": "error",
-    "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-    "no-underscore-dangle": ["error", { allow: ["_id"] }],
-    quotes: [
-      "error",
-      "double",
-      { avoidEscape: true, allowTemplateLiterals: true },
-    ],
+        ecmaVersion: "latest"
+    },
+
+    env: {
+        es6: true
+    },
+  settings: {
+    next: {
+      rootDir: ["apps/*/"],
+    },
   },
 };

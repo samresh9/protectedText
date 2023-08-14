@@ -1,11 +1,26 @@
 module.exports = {
-  extends: ["next", "turbo", "prettier"],
+  env: {
+    es6: true,
+    es2020: true,
+  },
+  extends: [
+    "eslint:recommended",
+    "airbnb-base",
+    "plugin:prettier/recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
+  ],
   rules: {
-    "@next/next/no-html-link-for-pages": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
+    "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
   },
   parserOptions: {
-    babelOptions: {
-      presets: [require.resolve("next/babel")],
-    },
+    ecmaVersion: "latest",
   },
 };

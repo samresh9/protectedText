@@ -5,18 +5,12 @@ module.exports = {
     es2021: true,
     jest: true,
   },
-  extends: ["airbnb-base", "plugin:prettier/recommended"],
+  extends: ["custom"],
   overrides: [],
   parserOptions: {
     ecmaVersion: "latest",
   },
   rules: {
-    "prettier/prettier": [
-      "error",
-      {
-        endOfLine: "auto",
-      },
-    ],
     "linebreak-style": ["error", "unix"],
     "eol-last": ["warn", "always"],
     "no-console": "error",

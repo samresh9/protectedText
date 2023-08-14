@@ -32,9 +32,7 @@ app.get("/uncaught", async (_req, _res) => {
   throw new Error("uncaught f f f");
 });
 
-morgan.token("type", (req, _res) => {
-  return req.headers["Content-type"];
-});
+morgan.token("type", (req, _res) => req.headers["Content-type"]);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Using format string of predefined tokens
@@ -44,7 +42,6 @@ app.use(
     { stream: httpLogs }
   )
 );
-
 app.use("/api/notes/", noteRoutes);
 app.use("/crypto", cryptoRoutes);
 

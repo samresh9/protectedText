@@ -1,17 +1,11 @@
 module.exports = {
-  root: true,
-  // This tells ESLint to load the config from the package `eslint-config-custom`
-  //extends: ["custom"],
+  extends: ["custom"],
   parserOptions: {
-        ecmaVersion: "latest"
-    },
+    ecmaVersion: "latest",
+  },
 
-    env: {
-        es6: true
-    },
-  settings: {
-    next: {
-      rootDir: ["apps/*/"],
-    },
+  env: {
+    es6: true,
+    jest: true,
   },
 };

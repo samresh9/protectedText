@@ -1,6 +1,9 @@
-const{encryptData,
+const {
+  encryptData,
   decryptData,
-  hashData} = require("./encryptDecryptHandler")
+  hashData,
+} = require("./encryptDecryptHandler");
+
 module.exports = {
   encryptData,
   decryptData,

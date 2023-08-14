@@ -1,0 +1,38 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    "**/.env"
+  ],
+  "pipeline": {
+    "start": {},
+    "backend#start": {
+      "dependsOn": [
+        "encrypt-handler#build"
+      ]
+    },
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "lint": {},
+    "backend#lint": {
+      "dependsOn": [
+        "encrypt-handler#build"
+      ]
+    },
+    "test": {},
+    "backend#test": {
+      "dependsOn": [
+        "encrypt-handler#build"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

@@ -3,7 +3,7 @@ const {
   encryptData,
   decryptData,
   hashData,
-} = require("../../src/utils/encryptDecryptHandler");
+} = require("../src/encryptDecryptHandler");
 
 describe("encryptData function", () => {
   let note;

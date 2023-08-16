@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "eslint-config-custom":"*",
     "eslint": "^8.39.0",
     "husky": "^8.0.0",
     "nodemon": "^2.0.22",

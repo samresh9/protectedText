@@ -1,16 +1,21 @@
 module.exports = {
   env: {
-    es6: true,
-    es2020: true,
+    browser: true,
+    commonjs: true,
+    node: true,
+    jest: true,
   },
   extends: [
-    "eslint:recommended",
-    "airbnb-base",
-    "plugin:prettier/recommended",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "plugin:react-hooks/recommended",
+    "airbnb-base",
+    "plugin:prettier/recommended",
+    "prettier",
+    "turbo",
   ],
+  plugins: ["react-refresh", "import"],
+
   rules: {
     "prettier/prettier": [
       "error",
@@ -18,6 +23,8 @@ module.exports = {
         endOfLine: "auto",
       },
     ],
+    "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
+    "max-len": ["error", { ignoreComments: true, ignoreStrings: true }],
     "linebreak-style": ["error", "unix"],
     "eol-last": ["warn", "always"],
     "no-console": "error",
@@ -27,6 +34,10 @@ module.exports = {
       "error",
       "double",
       { avoidEscape: true, allowTemplateLiterals: true },
+    ],
+    "react-refresh/only-export-components": [
+      "warn",
+      { allowConstantExport: true },
     ],
   },
   parserOptions: {

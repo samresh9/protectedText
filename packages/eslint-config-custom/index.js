@@ -5,15 +5,8 @@ module.exports = {
     node: true,
     jest: true,
   },
-  extends: [
-    "plugin:react/recommended",
-    "plugin:react/jsx-runtime",
-    "plugin:react-hooks/recommended",
-    "airbnb-base",
-    "plugin:prettier/recommended",
-    "prettier",
-    "turbo",
-  ],
+  ignorePatterns: ["**/dist/*"],
+  extends: ["airbnb-base", "plugin:prettier/recommended", "prettier", "turbo"],
   plugins: ["react-refresh", "import"],
 
   rules: {
@@ -23,7 +16,6 @@ module.exports = {
         endOfLine: "auto",
       },
     ],
-    "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
     "max-len": ["error", { ignoreComments: true, ignoreStrings: true }],
     "linebreak-style": ["error", "unix"],
     "eol-last": ["warn", "always"],

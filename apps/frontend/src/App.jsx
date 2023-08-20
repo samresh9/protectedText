@@ -1,10 +1,9 @@
 import { useState } from "react";
-import index from "encrypt-handler";
+import encryptHandler from "encrypt-handler";
 import reactLogo from "./assets/react.svg";
-// import viteLogo from "/vite.svg";
 import "./App.css";
 
-const { encryptData } = index;
+const { encryptData } = encryptHandler;
 function App() {
   const [count, setCount] = useState(0);
   return (

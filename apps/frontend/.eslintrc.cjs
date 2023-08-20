@@ -1,8 +1,13 @@
 module.exports = {
   root: true,
   env: { browser: true, es2020: true },
-  extends: ["custom"],
-  ignorePatterns: ["dist", ".eslintrc.cjs"],
+  extends: [
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
+    "custom",
+  ],
+  ignorePatterns: ["dist"],
   parserOptions: {
     ecmaVersion: 2022,
     sourceType: "module",
@@ -10,5 +15,7 @@ module.exports = {
   settings: {
     react: { version: "18.2" },
   },
-  rules: {},
+  rules: {
+    // "import/no-extraneous-dependencies": ["error", { Dependencies: true }],
+  },
 };

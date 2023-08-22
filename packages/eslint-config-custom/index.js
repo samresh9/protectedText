@@ -6,9 +6,10 @@ module.exports = {
     jest: true,
   },
   ignorePatterns: ["**/dist/*"],
+  settings: {
+    react: { version: "18.2.0" },
+  },
   extends: ["airbnb-base", "plugin:prettier/recommended", "prettier", "turbo"],
-  plugins: ["react-refresh", "import"],
-
   rules: {
     "prettier/prettier": [
       "error",
@@ -26,10 +27,6 @@ module.exports = {
       "error",
       "double",
       { avoidEscape: true, allowTemplateLiterals: true },
-    ],
-    "react-refresh/only-export-components": [
-      "warn",
-      { allowConstantExport: true },
     ],
   },
   parserOptions: {

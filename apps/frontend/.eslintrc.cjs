@@ -7,15 +7,15 @@ module.exports = {
     "plugin:react-hooks/recommended",
     "custom",
   ],
-  ignorePatterns: ["dist"],
+  plugins: ["react-refresh"],
   parserOptions: {
     ecmaVersion: 2022,
     sourceType: "module",
   },
-  settings: {
-    react: { version: "18.2" },
-  },
   rules: {
-    // "import/no-extraneous-dependencies": ["error", { Dependencies: true }],
+    "react-refresh/only-export-components": [
+      "warn",
+      { allowConstantExport: true },
+    ],
   },
 };

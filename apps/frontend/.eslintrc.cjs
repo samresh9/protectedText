@@ -8,6 +8,9 @@ module.exports = {
     "custom",
   ],
   plugins: ["react-refresh"],
+  settings: {
+    react: { version: "18.2.0" },
+  },
   parserOptions: {
     ecmaVersion: 2022,
     sourceType: "module",

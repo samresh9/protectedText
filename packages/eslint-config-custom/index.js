@@ -6,10 +6,8 @@ module.exports = {
     jest: true,
   },
   ignorePatterns: ["**/dist/*"],
-  settings: {
-    react: { version: "18.2.0" },
-  },
   extends: ["airbnb-base", "plugin:prettier/recommended", "prettier", "turbo"],
+  plugins: ["import"],
   rules: {
     "prettier/prettier": [
       "error",

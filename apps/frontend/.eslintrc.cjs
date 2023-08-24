@@ -20,5 +20,6 @@ module.exports = {
       "warn",
       { allowConstantExport: true },
     ],
+    // "import/prefer-default-export": ["error", { target: "any" }],
   },
 };

@@ -7,7 +7,7 @@ module.exports = {
     "plugin:react-hooks/recommended",
     "custom",
   ],
-  plugins: ["react-refresh"],
+  plugins: ["react-refresh", "import"],
   settings: {
     react: { version: "18.2.0" },
   },

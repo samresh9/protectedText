@@ -7,7 +7,6 @@ module.exports = {
   },
   ignorePatterns: ["**/dist/*"],
   extends: ["airbnb-base", "plugin:prettier/recommended", "prettier", "turbo"],
-  plugins: ["import"],
   rules: {
     "prettier/prettier": [
       "error",

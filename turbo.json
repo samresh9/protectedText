@@ -1,5 +1,11 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "MONGO_CONNECTION_URI",
+    "NODE_ENV",
+    "PORT",
+    "SERVER_URL"
+  ],
   "globalDependencies": [
     "**/.env"
   ],
@@ -18,8 +24,7 @@
         "dist/**"
       ]
     },
-    "lint": {},
-    "backend#lint": {
+    "lint": {
       "dependsOn": [
         "encrypt-handler#build"
       ]
@@ -31,6 +36,9 @@
       ]
     },
     "dev": {
+      "dependsOn": [
+        "encrypt-handler#build"
+      ],
       "cache": false,
       "persistent": true
     }

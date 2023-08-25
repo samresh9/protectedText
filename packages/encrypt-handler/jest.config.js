@@ -92,12 +92,11 @@ module.exports = {
     "ts",
     "tsx",
     "json",
-    "node"
+    "node",
   ],
 
-  
   coveragePathIgnorePatterns: [
-    './src/index.js', // ignores index.js
+    "./src/index.js", // ignores index.js
   ],
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   // moduleNameMapper: {},
@@ -165,10 +164,7 @@ module.exports = {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  testMatch: [
-    "**/__tests__/**/*.[jt]s?(x)",
-    "**/?(*.)+(spec|test).[tj]s?(x)"
-  ],
+  testMatch: ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[tj]s?(x)"],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [

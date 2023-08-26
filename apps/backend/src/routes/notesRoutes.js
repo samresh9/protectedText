@@ -262,11 +262,17 @@ router.get("/:id", async (req, res, next) => {
     const { id } = req.params;
     const noteData = await Note.findOne({ id });
     if (!noteData) {
-      return next();
+      return res.json({
+        status: true,
+        data: {
+          newUser: true,
+        },
+      });
     }
 
     return res.json({
       data: {
+        newUser: false,
         id: noteData.id,
         content: {
           encrypted: noteData.encryptedContent,

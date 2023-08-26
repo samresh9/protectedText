@@ -5,10 +5,14 @@ function encryptData(note, secretKey) {
   return cipherText;
 }
 function decryptData(encryptedData, secretKey) {
-  const plainText = CryptoJS.AES.decrypt(encryptedData, secretKey).toString(
-    CryptoJS.enc.Utf8
-  );
-  return plainText;
+  try {
+    const plainText = CryptoJS.AES.decrypt(encryptedData, secretKey).toString(
+      CryptoJS.enc.Utf8
+    );
+    return plainText;
+  } catch (error) {
+    return null;
+  }
 }
 function hashData(note, secretKey) {
   const hashText = CryptoJS.SHA512(note, secretKey).toString();

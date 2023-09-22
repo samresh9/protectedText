@@ -16,13 +16,17 @@
  *         encryptedContent:
  *           type: string
  *           description: The encrypted content provided by the user
- *         hash:
+ *         initHash:
  *           type: string
- *           description: The hash of the content provided by the user
+ *           description: The initial hash of the content provided by the client side
+ *         currentHash:
+ *           type: string
+ *           description: The current hash of the content provided by the client side
  *       example:
  *         id: samresh
  *         encryptedContent: U2FsdGVkX1804hyR1YLCzUxbN0oIZn/4dHoQgh0uV1QTOFag62NWS6zM6PCkIsLb
- *         hash: 3fb303c89207ddbfbf71fb4299fe6374d7adb298d56f43e5d2e1760b2dd1b00b27f16d3e39ebde4ca23109e9dd158b84e1a03bbba0c1b4a7fb586e3e0e6e6918
+ *         initHash: 3fb303c89207ddbfbf71fb4299fe6374d7adb298d56f43e5d2e1760b2dd1b00b27f16d3e39ebde4ca23109e9dd158b84e1a03bbba0c1b4a7fb586e3e0e6e6918
+ *         currentHash: 3fb303c89207ddbfbf71fb4299fe6374d7adb298d56f43e5d2e1760b2dd1b00b27f16d3e39ebde4ca23109e9dd158b84e1a03bbba0c1b4a7fb586e3e0e6e6918
  *     BadRequestError:
  *       type: object
  *       properties:
@@ -58,6 +62,15 @@
  *          description: Error Message
  *       example:
  *         message: Message of Error
+ *     UnauthorizedError:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: Error Message
+ *         code:
+ *           type: number
+ *           description: Specific Error Code
  *     NoteResponse:
  *       type: object
  *       required:
@@ -181,6 +194,15 @@
  *                   msg: "Note unique id is required"
  *                   path: "id"
  *                   location: "body"
+ *       401:
+ *         description: Unauthorized Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref : '#/components/schemas/UnauthorizedError'
+ *             example:
+ *               message: Unauthorized
+ *               code: UNAUTHORIZED_ERROR
  *       500:
  *         $ref : '#/components/responses/InternalServerError'
  */
@@ -219,11 +241,11 @@
  *             example:
  *               message: Not Found GET /api/notes/dfasfd
  *               code: NOT_FOUND
- *
  *       500:
  *         $ref: "#/components/responses/InternalServerError"
  */
 
+const config = require("config");
 const express = require("express");
 const Note = require("../models/notesModel");
 const { noteSchema } = require("../validations/notesRoutesValidations");
@@ -232,6 +254,8 @@ const {
 } = require("../middlewares/validationErrorsHandlerMiddleware");
 
 const router = express.Router();
+
+const errorCode = config.get("errorsCodes");
 
 router.get("/:id", async (req, res, next) => {
   try {
@@ -257,23 +281,28 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/", schemaValidator(noteSchema), async (req, res, next) => {
   try {
-    const { id, encryptedContent, hash } = req.body;
+    const { id, encryptedContent, initHash, currentHash } = req.body;
     const existingSite = await Note.findOne({ id });
-    if (existingSite?.hash === hash) {
+    if (!existingSite) {
+      const noteData = await Note.create({
+        id,
+        encryptedContent,
+        hash: currentHash,
+      });
       return res.json({
-        new: false,
+        new: true,
         updated: false,
         data: {
-          id: existingSite.id,
+          id: noteData.id,
           content: {
-            encrypted: existingSite.encryptedContent,
+            encrypted: noteData.encryptedContent,
             decrypted: null,
           },
         },
       });
     }
-    if (existingSite) {
-      existingSite.hash = hash;
+    if (existingSite.hash === initHash) {
+      existingSite.hash = currentHash;
       existingSite.encryptedContent = encryptedContent;
       await existingSite.save();
       return res.json({
@@ -288,22 +317,10 @@ router.post("/", schemaValidator(noteSchema), async (req, res, next) => {
         },
       });
     }
-    const noteData = await Note.create({
-      id,
-      encryptedContent,
-      hash,
-    });
-    return res.json({
-      new: true,
-      updated: false,
-      data: {
-        id: noteData.id,
-        content: {
-          encrypted: noteData.encryptedContent,
-          decrypted: null,
-        },
-      },
-    });
+    const unauthorizedError = new Error("Unauthorized");
+    res.statusCode = 401;
+    unauthorizedError.code = errorCode.unauthorized;
+    return next(unauthorizedError);
   } catch (err) {
     return next(err);
   }

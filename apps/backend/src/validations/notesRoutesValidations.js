@@ -5,7 +5,10 @@ const noteSchema = [
   body("encryptedContent")
     .notEmpty()
     .withMessage("Encrypted Content  is required"),
-  body("hash").notEmpty().withMessage("Hash Content is required"),
+  body("initHash").notEmpty().withMessage("Initial Hash Content is required"),
+  body("currentHash")
+    .notEmpty()
+    .withMessage("Current Hash Content is required"),
 ];
 const encryptSchema = [
   body("content").notEmpty().withMessage("Note is required"),

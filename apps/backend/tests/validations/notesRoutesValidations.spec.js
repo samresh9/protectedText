@@ -8,14 +8,19 @@ const {
 describe("noteSchema validation", () => {
   let errors;
 
-  it(" should validate 'id', 'encryptedContent', and 'hash' in noteSchema", async () => {
+  it(" should validate 'id', 'encryptedContent',  'initHash' and 'currentHash' in noteSchema", async () => {
     const req = {
-      body: { id: "test", encryptedContent: "encrypted", hash: "abc123" },
+      body: {
+        id: "test",
+        encryptedContent: "encrypted",
+        initHash: "abc123",
+        currentHash: "abc123",
+      },
     };
     const validations = await Promise.all(
       noteSchema.map((validation) => validation.run(req))
     );
-    expect(validations).toHaveLength(3);
+    expect(validations).toHaveLength(4);
     errors = validationResult(req);
     expect(errors.isEmpty()).toBe(true);
   });

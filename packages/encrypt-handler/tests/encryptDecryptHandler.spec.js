@@ -3,6 +3,7 @@ const {
   encryptData,
   decryptData,
   hashData,
+  hashSite,
 } = require("../src/encryptDecryptHandler");
 
 describe("encryptData function", () => {
@@ -80,6 +81,30 @@ describe("decryptData", () => {
     expect(() => {
       decryptData(note, null);
     }).toThrow("Cannot read properties of null (reading 'words')");
+  });
+});
+
+describe("hashSite", () => {
+  let siteId;
+  let expectedHash;
+  let hashSpy;
+
+  beforeEach(() => {
+    siteId = "test";
+    expectedHash =
+      "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff";
+    hashSpy = jest.spyOn(CryptoJS, "SHA512");
+  });
+
+  afterEach(() => {
+    hashSpy.mockRestore();
+  });
+
+  it("should call CryptoJS.SHA512 with expected params and hash the content", () => {
+    const hash = hashSite(siteId);
+    expect(hashSpy).toHaveBeenCalledTimes(1);
+    expect(hashSpy).toHaveBeenCalledWith(siteId);
+    expect(hash).toBe(expectedHash);
   });
 });
 

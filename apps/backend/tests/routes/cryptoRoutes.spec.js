@@ -6,7 +6,8 @@ describe("POST /crypto/encrypt", () => {
   it("should encrypt the data and return the result", async () => {
     const inputData = {
       content: "this is test",
-      secretKey: "mySecretKey",
+      secretKey: "secretKey",
+      siteid: "test",
     };
     const response = await request(app)
       .post("/crypto/encrypt")

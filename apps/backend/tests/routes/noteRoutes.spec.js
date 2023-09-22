@@ -45,8 +45,18 @@ describe("GET /:id", () => {
 
 describe("POST / ", () => {
   let noteData;
+  let existingSite;
   beforeEach(() => {
     noteData = {
+      id: "test999",
+      encryptedContent:
+        "U2FsdGVkX19h3AjJNnXeDJlr2PJ81Z8eeIXU10qFlDxBK77ePuJtXKMY5LT1FWMt",
+      initHash:
+        "43db4d6819813366729707ab93a2533ce0b6d405c66b76995472d36798f6bb53ff45f87d6efb5a5c822af7112d858d3f5fc0bde5e98ca4206391403060e3e3b7",
+      currentHash:
+        "43db4d6819813366729707ab93a2533ce0b6d405c66b76995472d36798f6bb53ff45f87d6efb5a5c822af7112d858d3f5fc0bde5e98ca4206391403060e3e3b7",
+    };
+    existingSite = {
       id: "test999",
       encryptedContent:
         "U2FsdGVkX19h3AjJNnXeDJlr2PJ81Z8eeIXU10qFlDxBK77ePuJtXKMY5LT1FWMt",
@@ -54,25 +64,24 @@ describe("POST / ", () => {
     };
   });
 
-  const existingSite = {
-    id: "test999",
-    encryptedContent:
-      "U2FsdGVkX19h3AjJNnXeDJlr2PJ81Z8eeIXU10qFlDxBK77ePuJtXKMY5LT1FWMt",
-    hash: "43db4d6819813366729707ab93a2533ce0b6d405c66b76995472d36798f6bb53ff45f87d6efb5a5c822af7112d858d3f5fc0bde5e98ca4206391403060e3e3b7",
-  };
-
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
   it("should create a new note", async () => {
+    const dbData = {
+      id: "test999",
+      encryptedContent:
+        "U2FsdGVkX19h3AjJNnXeDJlr2PJ81Z8eeIXU10qFlDxBK77ePuJtXKMY5LT1FWMt",
+      hash: noteData.initHash,
+    };
     Note.findOne = jest.fn().mockReturnValue(null);
-    Note.create = jest.fn().mockResolvedValue(noteData);
+    Note.create = jest.fn().mockResolvedValue(dbData);
     const response = await request(app)
       .post("/api/notes")
       .send(noteData)
       .expect(200);
-    expect(Note.create).toHaveBeenCalledWith(noteData);
+    expect(Note.create).toHaveBeenCalledWith(dbData);
     const expectedResponse = {
       new: true,
       updated: false,
@@ -92,7 +101,10 @@ describe("POST / ", () => {
     const updatedData = {
       id: "test999",
       encryptedContent: "U2FsdGVkX1+ROT30Q+O2KPErrOjNBAb5RdUw7mC5ITw=",
-      hash: "4e4e859d38b5f253532f9d6565cfb50753714ae022adab5e859b068910a2ed4aaa5a1aa0d7967b44af7a2f5f1d144afd539bbd3f2594bf5d067167af78acbe68",
+      initHash:
+        "43db4d6819813366729707ab93a2533ce0b6d405c66b76995472d36798f6bb53ff45f87d6efb5a5c822af7112d858d3f5fc0bde5e98ca4206391403060e3e3b7",
+      currentHash:
+        "4e4e859d38b5f253532f9d6565cfb50753714ae022adab5e859b068910a2ed4aaa5a1aa0d7967b44af7a2f5f1d144afd539bbd3f2594bf5d067167af78acbe68",
     };
 
     Note.findOne = jest.fn().mockResolvedValue(existingSite);
@@ -117,25 +129,17 @@ describe("POST / ", () => {
 
     expect(response.body).toEqual(expectedResponse);
   });
-  it("should return an existing note without updating if hash matches", async () => {
+  it("should return an error existing note without updating if hash donot match", async () => {
     Note.findOne = jest.fn().mockReturnValue(existingSite);
+    noteData.initHash =
+      "42db4d6819813366729707ab93a2533ce0b6d405c66b76995472d36798f6bb53ff45f87d6efb5a5c822af7112d858d3f5fc0bde5e98ca4206391403060e3e3b7";
     const response = await request(app)
       .post("/api/notes")
-      .send(existingSite)
-      .expect(200);
-
-    const expectedResponse = {
-      new: false,
-      updated: false,
-      data: {
-        id: "test999",
-        content: {
-          encrypted: existingSite.encryptedContent,
-          decrypted: null,
-        },
-      },
-    };
-    expect(expectedResponse).toEqual(response.body);
+      .send(noteData)
+      .expect(401);
+    const { message, code } = response.body;
+    expect(message).toBe("Unauthorized");
+    expect(code).toBe("UNAUTHORIZED_ERROR");
   });
 
   it("should give validation error if hash is missing", async () => {
@@ -149,7 +153,9 @@ describe("POST / ", () => {
       .send(noteData)
       .expect(400);
     const { message, code } = response.body;
-    expect(message).toBe("Hash Content is required");
+    expect(message).toBe(
+      "Initial Hash Content is required,Current Hash Content is required"
+    );
     expect(code).toBe("VALIDATION_ERROR");
   });
 

@@ -14,9 +14,14 @@ function hashData(note, secretKey) {
   const hashText = CryptoJS.SHA512(note, secretKey).toString();
   return hashText;
 }
+function hashSite(siteId) {
+  const hashText = CryptoJS.SHA512(siteId).toString();
+  return hashText;
+}
 
 module.exports = {
   encryptData,
   decryptData,
   hashData,
+  hashSite,
 };

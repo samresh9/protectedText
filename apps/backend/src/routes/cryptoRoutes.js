@@ -7,6 +7,7 @@
  *       required:
  *         - content
  *         - secretKey
+ *         - siteId
  *       properties:
  *         content:
  *           type: string
@@ -62,6 +63,7 @@
  *           example:
  *             content: this is an example
  *             secretKey: secretKey
+ *             siteId: samresh
  *     responses:
  *       200:
  *         description: Successful Response with Encrypted and HashContent
@@ -151,7 +153,7 @@
  *                 content:
  *                   encrypted: null
  *                   hash: null
- *                   decrypted: This is an example
+ *                   decrypted: this is an example82b6f2847220152242ed3aeb026215289dbf62d0b6587775dedccf9b414d0db92584a3082322496fd84b8b1e0d0ba19dfd15222a38a6cb1b4971af794ed119ef
  *       400:
  *         description: Validation Error
  *         content:
@@ -175,7 +177,12 @@
  */
 
 const express = require("express");
-const { encryptData, decryptData, hashData } = require("encrypt-handler");
+const {
+  encryptData,
+  decryptData,
+  hashData,
+  hashSite,
+} = require("encrypt-handler");
 const {
   encryptSchema,
   decryptSchema,
@@ -187,8 +194,9 @@ const {
 const router = express.Router();
 
 router.post("/encrypt", schemaValidator(encryptSchema), (req, res) => {
-  const { content, secretKey } = req.body;
-  const encryptedContent = encryptData(content, secretKey);
+  const { content, secretKey, siteId } = req.body;
+  const siteHash = hashSite(siteId);
+  const encryptedContent = encryptData(String(content + siteHash), secretKey);
   const hash = hashData(content, secretKey);
   return res.json({
     data: {

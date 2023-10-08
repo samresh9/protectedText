@@ -11,5 +11,6 @@ module.exports = {
   errorsCodes: {
     validationError: "VALIDATION_ERROR",
     notFound: "NOT_FOUND",
+    unauthorized: "UNAUTHORIZED_ERROR",
   },
 };

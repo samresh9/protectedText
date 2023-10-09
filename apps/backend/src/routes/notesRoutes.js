@@ -262,12 +262,13 @@ router.get("/:id", async (req, res, next) => {
     const { id } = req.params;
     const noteData = await Note.findOne({ id });
     if (!noteData) {
-      return res.json({
-        status: true,
-        data: {
-          newUser: true,
-        },
-      });
+      // return res.json({
+      //   status: true,
+      //   data: {
+      //     newUser: true,
+      //   },
+      // });
+      return next();
     }
 
     return res.json({

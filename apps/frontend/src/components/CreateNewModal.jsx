@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function CreateNewModal({ showModal }) {
-  const [closeModal, setCloseModal] = useState(showModal);
+function CreateNewModal() {
+  const [closeModal, setCloseModal] = useState(true);
   const handleOnClose = () => {
     setCloseModal((prevcloseModal) => !prevcloseModal);
   };

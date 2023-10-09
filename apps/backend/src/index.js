@@ -2,10 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const fs = require("fs");
 const morgan = require("morgan");
+const cors = require("cors");
 const path = require("path");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const cryptoRoutes = require("./routes/cryptoRoutes");
+
 const {
   handle500Error,
   handleNotFound,
@@ -16,11 +18,19 @@ const {
   uncaughtExceptionHandler,
 } = require("./utils/handleExceptionAndRejections");
 const options = require("./swaggerOptions");
+
 // handle uncaught exception and rejections
 process.on("uncaughtException", uncaughtExceptionHandler);
 process.on("unhandledRejection", unhandledRejectionsHandler);
 
 const app = express();
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 // swagger
 const specs = swaggerJsdoc(options);
 // Create a file to store httplog from morgan

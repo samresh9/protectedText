@@ -7,6 +7,7 @@ import ContentArea from "./ContentArea.jsx";
 import CreateNewModal from "./CreateNewModal.jsx";
 import PasswordModal from "./PasswordModal.jsx";
 import NewPasswordModal from "./NewPasswordModal.jsx";
+import Loader from "./Loader.jsx";
 
 const { encryptData, hashData } = encryptionHandler;
 
@@ -19,37 +20,59 @@ function WrapperComponent() {
   const [isNewPassword, setIsNewPassword] = useState(false);
   const [textAreaValue, setTextAreaValue] = useState("");
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
-  const [loadComponent, setLoadComponent] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState("");
   const fetcher = async (...args) => {
-    try {
-      const res = await fetch(...args);
-      // console.log(res);
-      const data = await res.json();
+    const res = await fetch(...args);
+    return res.json();
+    // try {
+    //   const res = await fetch(...args);
+    //   // console.log(res);
+    //   const data = await res.json();
+    //   console.log(data,"data")
+    //   if (data.code === "NOT_FOUND") {
+    //     setIsNewSite(true);
+    //   } else {
+    //     setEncryptedData(data.data.content.encrypted);
+    //   }
+    //   setLoadComponent(true);
+    // } catch (err) {
+    //   setError(err);
+    // }
+  };
+
+  const { id } = useParams();
+  const {
+    data: responseData,
+    error,
+    isLoading,
+  } = useSWR(`http://localhost:7000/api/notes/${id}`, fetcher, {
+    onSuccess: (data) => {
       if (data.code === "NOT_FOUND") {
         setIsNewSite(true);
       } else {
         setEncryptedData(data.data.content.encrypted);
       }
-      setLoadComponent(true);
-    } catch (err) {
-      setError(err);
-    }
-  };
+    },
+  });
 
-  const { id } = useParams();
-  // const { data, error, isLoading } = useSWR(
-  //   `http://localhost:7000/api/notes/${id}`,
-  //   fetcher
-  // );
+  // useEffect(() => {
+  //   fetcher(`http://localhost:7000/api/notes/${id}`);
+  // }, [id]);
 
-  useEffect(() => {
-    fetcher(`http://localhost:7000/api/notes/${id}`);
-  }, [id]);
-
-  // if (error) console.log(error); // <div className="text-red-500">Error occured</div>;
-
-  // if (isLoading) return <div>Lodaing...</div>;
+  if (isLoading)
+    return (
+      <>
+        <Loader />
+      </>
+    );
+  if (error)
+    return (
+      <>
+        <div className="flex items-center justify-center min-h-screen text-center text-red-500">
+          Error Occured: Try Again
+        </div>
+      </>
+    );
 
   const handleSaveClick = async () => {
     try {
@@ -57,7 +80,6 @@ function WrapperComponent() {
         setIsNewPassword(true);
         return;
       }
-
       const choosenPassword = isNewPassword ? newPassword : password;
       const encryptedContent = encryptData(textAreaValue, choosenPassword);
       const hash = hashData(textAreaValue, choosenPassword);
@@ -70,22 +92,26 @@ function WrapperComponent() {
       const response = await fetch(`http://localhost:7000/api/notes`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Specify the content type as JSON
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(postData), // Convert the data to JSON format
+        body: JSON.stringify(postData),
       });
-    
+      if (!response.ok) {
+        throw new Error("something went wrong");
+      }
+      alert("saved");
+      setIsSaveButtonDisabled(true);
     } catch (err) {
-      alert(err);
-      console.log(err);
+      setErrors(err.message);
     }
-    alert("saved");
   };
 
   return (
     <>
-      {error && <div>{error}</div>}
-      {loadComponent && (
+      {errors && (
+        <div className="min-h-full text-center text-red-600">{errors}</div>
+      )}
+      {responseData && (
         <>
           <Navbar
             onSaveClick={handleSaveClick}

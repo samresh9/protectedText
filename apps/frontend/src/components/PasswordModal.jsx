@@ -3,28 +3,22 @@ import encryptionHandler from "encrypt-handler";
 import PropTypes from "prop-types";
 
 const { decryptData } = encryptionHandler;
-function PasswordModal({
-  showModal,
-  data,
-  setDecryptedData,
-  password,
-  setPassword,
-}) {
+function PasswordModal({ data, setDecryptedData, password, setPassword }) {
   const [wrongPassword, setWrongPassword] = useState(false);
-  const [closeModal, setCloseModal] = useState(showModal);
+  const [closeModal, setCloseModal] = useState(true);
   const handleOnClose = () => {
     setCloseModal((prevcloseModal) => !prevcloseModal);
   };
   function handleDecryption(e) {
     e.preventDefault();
-    const decrypted = decryptData(data.content.encrypted, password);
+    const decrypted = decryptData(data, password);
 
     if (!decrypted) {
       setWrongPassword(true); // Set wrongPassword if decryption fails
     } else {
       setWrongPassword(false); // Reset wrongPassword if decryption is successful
       setDecryptedData(decrypted);
-      setPassword("");
+      // setPassword("");
       handleOnClose();
     }
   }
@@ -44,7 +38,7 @@ function PasswordModal({
                   className="p-2 mt-1 text-black bg-white"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="new-password"
+                  // autoComplete="new-password"
                 />
                 <button
                   type="submit"

@@ -1,20 +1,22 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import ModalLayout from "./ModalLayout.jsx";
 
-function CreateNewModal() {
-  const [closeModal, setCloseModal] = useState(true);
+function CreateNewModal({ isOpenCreateNewModal, onToggle, urlId }) {
   const handleOnClose = () => {
-    setCloseModal((prevcloseModal) => !prevcloseModal);
+    onToggle();
   };
   return (
     <>
-      {closeModal && (
+      {isOpenCreateNewModal && (
         <>
-          <div className="fixed inset-0 flex items-center justify-center text-black bg-black bg-opacity-30 backdrop-blur-sm ">
-            <div className="p-5 mb-4 text-center bg-white rounded w-72">
+          <ModalLayout bgColor="bg-white">
+            <>
               <p className="mb-4"> Create New Site?</p>
-              <p>Would you like to create new Site with id $id ?</p>
+              <p>
+                Would you like to create new Site with Site Name{" "}
+                <span className="font-mono text-lg"> {` ${urlId} ?`}</span>
+              </p>
               <div className="flex justify-evenly">
                 <button
                   className="px-3 py-1 mt-5 bg-green-300 rounded"
@@ -28,8 +30,8 @@ function CreateNewModal() {
                   </button>
                 </Link>
               </div>
-            </div>
-          </div>
+            </>
+          </ModalLayout>
         </>
       )}
     </>
@@ -37,5 +39,8 @@ function CreateNewModal() {
 }
 CreateNewModal.propTypes = {
   showModal: PropTypes.bool,
+  isOpenCreateNewModal: PropTypes.bool,
+  onToggle: PropTypes.func,
+  urlId: PropTypes.string,
 };
 export default CreateNewModal;

@@ -3,5 +3,6 @@
     "source.fixAll": true
   },
   "eslint.validate": ["javascript"],
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false
 }

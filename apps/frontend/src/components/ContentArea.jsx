@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 function ContentArea({
@@ -6,13 +6,14 @@ function ContentArea({
   textAreaValue,
   setTextAreaValue,
   setIsSaveButtonDisabled,
+  isOpenCreateNewModal,
 }) {
   const inputEl = useRef();
   useEffect(() => {
-    if (textAreaValue) {
+    if (textAreaValue || !isOpenCreateNewModal) {
       inputEl.current.focus();
     }
-  }, [textAreaValue]);
+  }, [textAreaValue, isOpenCreateNewModal]);
 
   useEffect(() => {
     setTextAreaValue(data);
@@ -43,5 +44,6 @@ ContentArea.propTypes = {
   textAreaValue: PropTypes.string,
   setTextAreaValue: PropTypes.func,
   setIsSaveButtonDisabled: PropTypes.func,
+  isOpenCreateNewModal: PropTypes.bool,
 };
 export default ContentArea;

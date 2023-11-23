@@ -1,6 +1,12 @@
+import PropTypes from "prop-types";
 import CustomButton from "./CustomButton.jsx";
 
-const Navbar = ({ onSaveClick, isSaveButtonDisabled }) => {
+const Navbar = ({
+  onSaveClick,
+  isSaveButtonDisabled,
+  onChangeClick,
+  password,
+}) => {
   return (
     <>
       <div>
@@ -8,12 +14,14 @@ const Navbar = ({ onSaveClick, isSaveButtonDisabled }) => {
           <p className="text-xl">ProtectedText </p>
           <div className="flex justify-center gap-2 md:gap-3">
             <CustomButton
-              onSaveClick={onSaveClick}
-              isSaveButtonDisabled={isSaveButtonDisabled}
+              onClick={onSaveClick}
+              buttonDisabled={isSaveButtonDisabled}
             >
               Save
             </CustomButton>
-            <CustomButton>Change Password</CustomButton>
+            <CustomButton onClick={onChangeClick} buttonDisabled={!password}>
+              Change Password
+            </CustomButton>
             <CustomButton>Delete</CustomButton>
           </div>
         </div>
@@ -21,5 +29,10 @@ const Navbar = ({ onSaveClick, isSaveButtonDisabled }) => {
     </>
   );
 };
-
+Navbar.propTypes = {
+  onSaveClick: PropTypes.func,
+  isSaveButtonDisabled: PropTypes.bool,
+  onChangeClick: PropTypes.func,
+  password: PropTypes.string,
+};
 export default Navbar;

@@ -1,9 +1,20 @@
 import { useState } from "react";
 import encryptionHandler from "encrypt-handler";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import PasswordInput from "./PasswordInput.jsx";
+import ModalLayout from "./ModalLayout.jsx";
+import ModalCustomButton from "./ModalCustomButton.jsx";
+import "../App.css";
 
-const { decryptData } = encryptionHandler;
-function PasswordModal({ data, setDecryptedData, password, setPassword }) {
+const { decryptData, hashData } = encryptionHandler;
+function PasswordModal({
+  data,
+  setDecryptedData,
+  password,
+  setPassword,
+  setInitHash,
+}) {
   const [wrongPassword, setWrongPassword] = useState(false);
   const [closeModal, setCloseModal] = useState(true);
   const handleOnClose = () => {
@@ -11,54 +22,73 @@ function PasswordModal({ data, setDecryptedData, password, setPassword }) {
   };
   function handleDecryption(e) {
     e.preventDefault();
-    const decrypted = decryptData(data, password);
-
-    if (!decrypted) {
-      setWrongPassword(true); // Set wrongPassword if decryption fails
-    } else {
-      setWrongPassword(false); // Reset wrongPassword if decryption is successful
+    try {
+      const decrypted = decryptData(data, password);
+      const initHash = hashData(decrypted, password);
+      setWrongPassword(false);
       setDecryptedData(decrypted);
-      // setPassword("");
+      setInitHash(initHash);
       handleOnClose();
+    } catch (err) {
+      setWrongPassword(true);
     }
   }
 
   return (
     <>
       {closeModal && (
-        <div className="fixed inset-0 flex items-center justify-center text-white bg-black bg-opacity-30 backdrop-blur-sm ">
-          <div className="p-5 mb-4 text-center rounded bg-zinc-800 w-72">
-            <p className="mb-4">Site already exists</p>
-            <p>Enter your password to decrypt the site</p>
-            {wrongPassword ? <p>Your password is incorrect</p> : null}
-            <form onSubmit={handleDecryption}>
-              <div className="flex flex-col justify-evenly">
-                <input
-                  type="password"
-                  className="p-2 mt-1 text-black bg-white"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  // autoComplete="new-password"
-                />
-                <button
-                  type="submit"
-                  className="px-3 py-1 mt-5 bg-green-300 rounded"
-                >
-                  Decrypt The Site
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <ModalLayout bgColor="bg-white">
+          <p className="mb-4 italic">
+            This site already exists. If this is your site enter the password,
+            or you can try using different url.
+          </p>
+
+          {wrongPassword ? (
+            <>
+              <p
+                className={
+                  wrongPassword
+                    ? "italic text-red-500 animate-shake "
+                    : "italic text-red-500 "
+                }
+              >
+                Your password is incorrect.
+              </p>
+              <p className="italic">
+                Try different password, or go to
+                <p className="font-bold underline">
+                  <Link to="/">(Homepage)</Link>{" "}
+                </p>
+              </p>
+            </>
+          ) : null}
+          <p className="mt-2">Enter your password to enter site</p>
+          <form onSubmit={handleDecryption}>
+            <div className="flex flex-col justify-evenly">
+              <PasswordInput
+                placeholder="Enter Password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+              />
+              <ModalCustomButton
+                type="submit"
+                bgColor="bg-green-300"
+                text=" Decrypt The Site"
+              />
+            </div>
+          </form>
+        </ModalLayout>
       )}
     </>
   );
 }
 PasswordModal.propTypes = {
   showModal: PropTypes.bool,
-  data: PropTypes.object,
+  data: PropTypes.string,
   setDecryptedData: PropTypes.func,
   password: PropTypes.string,
   setPassword: PropTypes.func,
+  setInterval: PropTypes.func,
+  setInitHash: PropTypes.func,
 };
 export default PasswordModal;

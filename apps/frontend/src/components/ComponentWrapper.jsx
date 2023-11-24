@@ -42,7 +42,7 @@ function WrapperComponent() {
     data: res,
     error,
     isLoading,
-  } = useSWR(`http://localhost:7000/api/notes/${id}`, fetcher, {
+  } = useSWR(`${import.meta.env.VITE_API_BASE_URL}api/notes/${id}`, fetcher, {
     onSuccess: (responseData) => {
       if (responseData.code === "NOT_FOUND") {
         setIsNewSite(true);
@@ -83,13 +83,16 @@ function WrapperComponent() {
       initHash: initialHash,
       currentHash,
     };
-    const response = await fetch(`http://localhost:7000/api/notes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}api/notes`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postData),
+      }
+    );
     return { response, currentHash };
   };
   const handleSaveClick = async () => {

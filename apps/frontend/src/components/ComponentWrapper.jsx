@@ -8,7 +8,6 @@ import ContentArea from "./ContentArea.jsx";
 import CreateNewModal from "./CreateNewModal.jsx";
 import PasswordModal from "./PasswordModal.jsx";
 import NewPasswordModal from "./NewPasswordModal.jsx";
-
 import Loader from "./Loader.jsx";
 import ModalLayout from "./ModalLayout.jsx";
 import AlertModal from "./AlertModal.jsx";
@@ -33,7 +32,9 @@ function WrapperComponent() {
   const [isSavedAlert, setIsSavedAlert] = useState(false);
   const [errors, setErrors] = useState("");
   const fetcher = async (...args) => {
-    const res = await fetch(...args);
+    const res = await fetch(...args, {
+      headers: { "Content-Type": "application/json" },
+    });
     return res.json();
   };
 
@@ -138,7 +139,6 @@ function WrapperComponent() {
       setIsLoadingSaveData(false);
     }
   };
-
   return (
     <>
       {res && (

@@ -24,6 +24,10 @@ function PasswordModal({
     e.preventDefault();
     try {
       const decrypted = decryptData(data, password);
+      if (!decrypted) {
+        setWrongPassword(true);
+        return;
+      }
       const initHash = hashData(decrypted, password);
       setWrongPassword(false);
       setDecryptedData(decrypted);

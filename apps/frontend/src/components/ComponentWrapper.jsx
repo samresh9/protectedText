@@ -32,9 +32,7 @@ function WrapperComponent() {
   const [isSavedAlert, setIsSavedAlert] = useState(false);
   const [errors, setErrors] = useState("");
   const fetcher = async (...args) => {
-    const res = await fetch(...args, {
-      headers: { "Content-Type": "application/json" },
-    });
+    const res = await fetch(...args);
     return res.json();
   };
 

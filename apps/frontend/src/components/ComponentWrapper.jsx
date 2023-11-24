@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useSWR from "swr";
 import { useParams } from "react-router-dom";
+import PropTypes from "prop-types";
 import encryptionHandler from "encrypt-handler";
 import Navbar from "./NavBar.jsx";
 import ContentArea from "./ContentArea.jsx";
@@ -24,7 +25,6 @@ function WrapperComponent() {
   const [isLoadingSaveData, setIsLoadingSaveData] = useState(false);
   const [isNewSite, setIsNewSite] = useState(false);
   const [password, setPassword] = useState("");
-  //  const [newPassword, setNewPassword] = useState("");
   const [isNewPassword, setIsNewPassword] = useState(false);
   const [isChangePassword, setIsChangePassword] = useState(false);
   const [textAreaValue, setTextAreaValue] = useState("");
@@ -38,24 +38,20 @@ function WrapperComponent() {
   };
 
   const { id } = useParams();
-  const { data, error, isLoading } = useSWR(
-    `http://localhost:7000/api/notes/${id}`,
-    fetcher,
-    {
-      onSuccess: (responseData) => {
-        if (responseData.code === "NOT_FOUND") {
-          setIsNewSite(true);
-        } else {
-          setEncryptedData(responseData.data.content.encrypted);
-        }
-      },
-      revalidateOnFocus: false,
-    }
-  );
-
-  // useEffect(() => {
-  //   fetcher(`http://localhost:7000/api/notes/${id}`);
-  // }, [id]);
+  const {
+    data: res,
+    error,
+    isLoading,
+  } = useSWR(`http://localhost:7000/api/notes/${id}`, fetcher, {
+    onSuccess: (responseData) => {
+      if (responseData.code === "NOT_FOUND") {
+        setIsNewSite(true);
+      } else {
+        setEncryptedData(responseData.data.content.encrypted);
+      }
+    },
+    revalidateOnFocus: false,
+  });
 
   if (isLoading)
     return (
@@ -63,6 +59,7 @@ function WrapperComponent() {
         <Loader />
       </>
     );
+
   if (error)
     return (
       <>
@@ -93,7 +90,6 @@ function WrapperComponent() {
       },
       body: JSON.stringify(postData),
     });
-    // setIsChangePassword(false);
     return { response, currentHash };
   };
   const handleSaveClick = async () => {
@@ -142,87 +138,89 @@ function WrapperComponent() {
 
   return (
     <>
-      <Main>
-        {errors && (
-          <ModalLayout bgColor="bg-white">
-            <p className="z-50 text-center text-red-500 ">{errors}</p>
-          </ModalLayout>
-        )}
+      {res && (
+        <Main>
+          {errors && (
+            <ModalLayout bgColor="bg-white">
+              <p className="z-50 text-center text-red-500 ">{errors}</p>
+            </ModalLayout>
+          )}
 
-        <Navbar
-          onSaveClick={handleSaveClick}
-          onChangeClick={handleChangePassword}
-          isSaveButtonDisabled={isSaveButtonDisabled}
-          password={password}
-        />
-        {isLoadingSaveData && <Loader />}
-        {isSavedAlert && (
-          <AlertModal
-            onCloseAlert={() => {
-              setIsSavedAlert(false);
-            }}
+          <Navbar
+            onSaveClick={handleSaveClick}
+            onChangeClick={handleChangePassword}
+            isSaveButtonDisabled={isSaveButtonDisabled}
+            password={password}
           />
-        )}
-        {!errors && (
-          <Content>
-            <>
-              <ContentArea
-                data={decryptedData}
-                password={password}
-                textAreaValue={textAreaValue}
-                setTextAreaValue={setTextAreaValue}
-                setIsSaveButtonDisabled={setIsSaveButtonDisabled}
-                isOpenCreateNewModal={isOpenCreateNewModal}
-              />
-              {isNewSite && (
-                <CreateNewModal
+          {isLoadingSaveData && <Loader />}
+          {isSavedAlert && (
+            <AlertModal
+              onCloseAlert={() => {
+                setIsSavedAlert(false);
+              }}
+            />
+          )}
+          {!errors && (
+            <Content>
+              <>
+                <ContentArea
+                  data={decryptedData}
+                  password={password}
+                  textAreaValue={textAreaValue}
+                  setTextAreaValue={setTextAreaValue}
+                  setIsSaveButtonDisabled={setIsSaveButtonDisabled}
                   isOpenCreateNewModal={isOpenCreateNewModal}
-                  urlId={id}
-                  onToggle={() =>
-                    setIsOpenCreateNewModal((prevopenModal) => !prevopenModal)
-                  }
                 />
-              )}
-              {!isNewSite && (
-                <PasswordModal
-                  data={encryptedData}
-                  setDecryptedData={setDecryptedData}
-                  setInitHash={setInitHash}
-                  password={password}
-                  setPassword={setPassword}
-                />
-              )}
-              {isChangePassword && (
-                <NewPasswordModal
-                  password={password}
-                  setPassword={setPassword}
-                  onEncryption={handleChangePassword}
-                  onClose={() => {
-                    setIsChangePassword(false);
-                  }}
-                  modalTitle="Enter a New password"
-                  modalMessage="Do not forgot"
-                  modalType={modalType.changePassword}
-                />
-              )}
-              {isNewPassword && (
-                <NewPasswordModal
-                  password={password}
-                  setPassword={setPassword}
-                  onEncryption={handleSaveClick}
-                  onClose={() => {
-                    setIsNewPassword(false);
-                  }}
-                  modalType={modalType.newPassword}
-                  modalTitle="Create a password"
-                  modalMessage=" Make sure to remember the password. We do not store passwords,
+                {isNewSite && (
+                  <CreateNewModal
+                    isOpenCreateNewModal={isOpenCreateNewModal}
+                    urlId={id}
+                    onToggle={() =>
+                      setIsOpenCreateNewModal((prevopenModal) => !prevopenModal)
+                    }
+                  />
+                )}
+                {!isNewSite && (
+                  <PasswordModal
+                    data={encryptedData}
+                    setDecryptedData={setDecryptedData}
+                    setInitHash={setInitHash}
+                    password={password}
+                    setPassword={setPassword}
+                  />
+                )}
+                {isChangePassword && (
+                  <NewPasswordModal
+                    password={password}
+                    setPassword={setPassword}
+                    onEncryption={handleChangePassword}
+                    onClose={() => {
+                      setIsChangePassword(false);
+                    }}
+                    modalTitle="Enter a New password"
+                    modalMessage="Do not forgot"
+                    modalType={modalType.changePassword}
+                  />
+                )}
+                {isNewPassword && (
+                  <NewPasswordModal
+                    password={password}
+                    setPassword={setPassword}
+                    onEncryption={handleSaveClick}
+                    onClose={() => {
+                      setIsNewPassword(false);
+                    }}
+                    modalType={modalType.newPassword}
+                    modalTitle="Create a password"
+                    modalMessage=" Make sure to remember the password. We do not store passwords,
                   just the encrypted data."
-                />
-              )}
-            </>
-          </Content>
-        )}
-      </Main>
+                  />
+                )}
+              </>
+            </Content>
+          )}
+        </Main>
+      )}
     </>
   );
 }
@@ -233,7 +231,9 @@ function Main({ children }) {
     </>
   );
 }
-
+Main.propTypes = {
+  children: PropTypes.node,
+};
 function Content({ children }) {
   return (
     <>
@@ -241,5 +241,7 @@ function Content({ children }) {
     </>
   );
 }
-
+Content.propTypes = {
+  children: PropTypes.node,
+};
 export default WrapperComponent;

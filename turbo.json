@@ -4,7 +4,8 @@
     "MONGO_CONNECTION_URI",
     "NODE_ENV",
     "PORT",
-    "SERVER_URL"
+    "SERVER_URL",
+    "ENABLED_ORIGIN"
   ],
   "globalDependencies": [
     "**/.env"

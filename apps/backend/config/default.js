@@ -8,6 +8,9 @@ module.exports = {
   db: {
     url: process.env.MONGO_CONNECTION_URI,
   },
+  corsOrigin: {
+    url: process.env.ENABLED_ORIGIN,
+  },
   errorsCodes: {
     validationError: "VALIDATION_ERROR",
     notFound: "NOT_FOUND",

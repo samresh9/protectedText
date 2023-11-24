@@ -1,4 +1,5 @@
 require("dotenv").config();
+const config = require("config");
 const express = require("express");
 const fs = require("fs");
 const morgan = require("morgan");
@@ -19,6 +20,7 @@ const {
 } = require("./utils/handleExceptionAndRejections");
 const options = require("./swaggerOptions");
 
+const allowedOrigin = config.get("corsOrigin");
 // handle uncaught exception and rejections
 process.on("uncaughtException", uncaughtExceptionHandler);
 process.on("unhandledRejection", unhandledRejectionsHandler);
@@ -26,7 +28,7 @@ process.on("unhandledRejection", unhandledRejectionsHandler);
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigin.url,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })

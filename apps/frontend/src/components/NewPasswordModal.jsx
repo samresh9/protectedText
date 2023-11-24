@@ -76,5 +76,12 @@ const NewPasswordModal = ({
     </>
   );
 };
-
+NewPasswordModal.propTypes = {
+  onEncryption: PropTypes.func,
+  modalMessage: PropTypes.string,
+  modalTitle: PropTypes.string,
+  onClose: PropTypes.func,
+  modalType: PropTypes.string,
+  setPassword: PropTypes.func,
+};
 export default NewPasswordModal;

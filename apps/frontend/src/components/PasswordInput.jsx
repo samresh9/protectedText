@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
 
 const PasswordInput = ({ value, onChange, placeholder, focus }) => {
   const inputRef = useRef();
@@ -21,5 +22,10 @@ const PasswordInput = ({ value, onChange, placeholder, focus }) => {
     />
   );
 };
-
+PasswordInput.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  placeholder: PropTypes.string,
+  focus: PropTypes.bool,
+};
 export default PasswordInput;

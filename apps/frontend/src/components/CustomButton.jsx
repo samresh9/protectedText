@@ -1,9 +1,13 @@
 import PropTypes from "prop-types";
 
-const CustomButton = ({ children }) => {
+const CustomButton = ({ onClick, children, buttonDisabled }) => {
   return (
     <>
-      <button className=" p-1 md:p-2 text-blue-800 bg-white rounded hover:text-blue-500 focus:ring-2 focus:ring-blue-300 disabled:bg-gray-400">
+      <button
+        onClick={onClick}
+        disabled={buttonDisabled}
+        className="p-1 text-blue-800 bg-white rounded md:p-2 hover:text-blue-500 focus:ring-2 focus:ring-blue-300 disabled:bg-gray-400"
+      >
         {children}
       </button>
     </>
@@ -12,5 +16,7 @@ const CustomButton = ({ children }) => {
 
 CustomButton.propTypes = {
   children: PropTypes.node,
+  onClick: PropTypes.func,
+  buttonDisabled: PropTypes.bool,
 };
 export default CustomButton;

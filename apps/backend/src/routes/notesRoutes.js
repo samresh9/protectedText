@@ -264,9 +264,9 @@ router.get("/:id", async (req, res, next) => {
     if (!noteData) {
       return next();
     }
-
     return res.json({
       data: {
+        newUser: false,
         id: noteData.id,
         content: {
           encrypted: noteData.encryptedContent,

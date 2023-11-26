@@ -24,6 +24,7 @@
   "homepage": "https://github.com/samresh9/protectedText#readme",
   "dependencies": {
     "config": "^3.3.9",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "encrypt-handler": "*",
     "express": "^4.18.2",

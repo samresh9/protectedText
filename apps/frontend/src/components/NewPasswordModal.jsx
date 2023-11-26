@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import GenericModal from "./ModalLayout.jsx";
 import PasswordInput from "./PasswordInput.jsx";
@@ -15,6 +15,10 @@ const NewPasswordModal = ({
   const [repeatPassword, setRepeatPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isnotMatch, setIsNotMatch] = useState();
+  useEffect(() => {
+    setPassword(newPassword);
+  }, [newPassword, setPassword]);
+
   const handleOnClose = () => {
     onClose();
   };
@@ -23,9 +27,10 @@ const NewPasswordModal = ({
     if (newPassword === repeatPassword) {
       setIsNotMatch(false);
       if (modalType === "changePassword") {
-        onEncryption(newPassword);
+        // calls handleChnagePassword()
+        onEncryption();
       } else if (modalType === "newPassword") {
-        setPassword(newPassword);
+        // calls handleSaveClick()
         onEncryption();
       }
       handleOnClose();

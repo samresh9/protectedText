@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import PropTypes from "prop-types";
 
-function AlertModal({ onCloseAlert }) {
+function AlertModal({ onCloseAlert, isDeleteSite }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       onCloseAlert();
@@ -15,7 +15,11 @@ function AlertModal({ onCloseAlert }) {
           className={`p-2 mb-4 text-center bg-slate-500 rounded w-55 
           bg-opacity-70`}
         >
-          <div className="text-lg ">Saved Successfully!!!</div>
+          {isDeleteSite ? (
+            <div className="text-lg ">Deleted Successfully!!!</div>
+          ) : (
+            <div className="text-lg ">Saved Successfully!!!</div>
+          )}
         </div>
       </div>
     </>
@@ -23,5 +27,6 @@ function AlertModal({ onCloseAlert }) {
 }
 AlertModal.propTypes = {
   onCloseAlert: PropTypes.func,
+  isDeleteSite: PropTypes.bool,
 };
 export default AlertModal;

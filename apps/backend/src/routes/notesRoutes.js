@@ -325,5 +325,24 @@ router.post("/", schemaValidator(noteSchema), async (req, res, next) => {
     return next(err);
   }
 });
-
+router.delete("/", async (req, res, next) => {
+  try {
+    // const { id } = req.params;
+    const { initHash, id } = req.body;
+    const noteData = await Note.findOne({ id });
+    if (!noteData) {
+      return next();
+    }
+    if (initHash === noteData.hash) {
+      await Note.deleteOne({ id });
+      return res.json({ delete: true });
+    }
+    const unauthorizedError = new Error("Unauthorized");
+    res.statusCode = 401;
+    unauthorizedError.code = errorCode.unauthorized;
+    return next(unauthorizedError);
+  } catch (err) {
+    return next(err);
+  }
+});
 module.exports = router;

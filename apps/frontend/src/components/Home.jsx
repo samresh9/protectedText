@@ -7,7 +7,7 @@ function Home() {
   const Navigate = useNavigate();
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && id) {
-      Navigate(`/${id}`);
+      Navigate(`/${id.toLowerCase()}`);
     }
   };
   return (
@@ -46,7 +46,7 @@ function Home() {
                 onKeyDown={handleKeyDown}
               ></input>
               <span>
-                <Link to={`/${id}`}>
+                <Link to={`/${id.toLowerCase()}`}>
                   <CustomButton>GO</CustomButton>
                 </Link>
               </span>

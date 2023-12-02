@@ -37,20 +37,26 @@ function WrapperComponent() {
   };
 
   const { id } = useParams();
+  const lowercaseId = id.toLowerCase();
+
   const {
     data: res,
     error,
     isLoading,
-  } = useSWR(`${import.meta.env.VITE_API_BASE_URL}api/notes/${id}`, fetcher, {
-    onSuccess: (responseData) => {
-      if (responseData.code === "NOT_FOUND") {
-        setIsNewSite(true);
-      } else {
-        setEncryptedData(responseData.data.content.encrypted);
-      }
-    },
-    revalidateOnFocus: false,
-  });
+  } = useSWR(
+    `${import.meta.env.VITE_API_BASE_URL}api/notes/${lowercaseId}`,
+    fetcher,
+    {
+      onSuccess: (responseData) => {
+        if (responseData.code === "NOT_FOUND") {
+          setIsNewSite(true);
+        } else {
+          setEncryptedData(responseData.data.content.encrypted);
+        }
+      },
+      revalidateOnFocus: false,
+    }
+  );
 
   if (isLoading)
     return (
@@ -77,7 +83,7 @@ function WrapperComponent() {
     }
 
     const postData = {
-      id,
+      id: lowercaseId,
       encryptedContent,
       initHash: initialHash,
       currentHash,
@@ -115,14 +121,13 @@ function WrapperComponent() {
     }
   };
 
-  const handleChangePassword = async (newPassword) => {
+  const handleChangePassword = async () => {
     try {
       if (!isChangePassword) {
         setIsChangePassword(true);
         return;
       }
-      const choosenPassword = newPassword;
-      setPassword(newPassword);
+      const choosenPassword = password;
       const { response, currentHash } = await handlePostData(choosenPassword);
       if (!response.ok) {
         throw new Error("something went wrong");
@@ -175,7 +180,7 @@ function WrapperComponent() {
                 {isNewSite && (
                   <CreateNewModal
                     isOpenCreateNewModal={isOpenCreateNewModal}
-                    urlId={id}
+                    urlId={lowercaseId}
                     onToggle={() =>
                       setIsOpenCreateNewModal((prevopenModal) => !prevopenModal)
                     }

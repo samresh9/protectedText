@@ -14,6 +14,7 @@ function PasswordModal({
   password,
   setPassword,
   setInitHash,
+  onDeleteAndPasswordButtonDisabled,
 }) {
   const [wrongPassword, setWrongPassword] = useState(false);
   const [closeModal, setCloseModal] = useState(true);
@@ -32,6 +33,7 @@ function PasswordModal({
       setWrongPassword(false);
       setDecryptedData(decrypted);
       setInitHash(initHash);
+      onDeleteAndPasswordButtonDisabled(false);
       handleOnClose();
     } catch (err) {
       setWrongPassword(true);
@@ -94,5 +96,6 @@ PasswordModal.propTypes = {
   setPassword: PropTypes.func,
   setInterval: PropTypes.func,
   setInitHash: PropTypes.func,
+  onDeleteAndPasswordButtonDisabled: PropTypes.func,
 };
 export default PasswordModal;

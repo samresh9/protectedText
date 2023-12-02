@@ -34,6 +34,10 @@ function WrapperComponent() {
   const [errors, setErrors] = useState("");
   const [isDeleteSite, setIsDeleteSite] = useState(false);
   const [isDeleteSuccessfull, setIsDeleteSuccessful] = useState(false);
+  const [
+    isDeleteAndPasswordButtonDisabled,
+    setIsDeleteAndPasswordButtonDisabled,
+  ] = useState(true);
   const fetcher = async (...args) => {
     const res = await fetch(...args);
     return res.json();
@@ -110,7 +114,7 @@ function WrapperComponent() {
         return;
       }
       const postData = {
-        id,
+        id: lowercaseId,
         initHash,
       };
       const response = await fetch(
@@ -150,6 +154,7 @@ function WrapperComponent() {
       }
       setIsSavedAlert(true);
       setIsSaveButtonDisabled(true);
+      setIsDeleteAndPasswordButtonDisabled(false);
       setInitHash(currentHash);
     } catch (err) {
       setErrors(err.message);
@@ -194,7 +199,11 @@ function WrapperComponent() {
             onChangeClick={handleChangePassword}
             onDelete={handleDelteData}
             isSaveButtonDisabled={isSaveButtonDisabled}
+            isDeleteAndPasswordButtonDisabled={
+              isDeleteAndPasswordButtonDisabled
+            }
             password={password}
+            isNewSite={textAreaValue}
           />
           {isLoadingSaveData && <Loader />}
           {isSavedAlert && (
@@ -232,6 +241,9 @@ function WrapperComponent() {
                     setInitHash={setInitHash}
                     password={password}
                     setPassword={setPassword}
+                    onDeleteAndPasswordButtonDisabled={() => {
+                      setIsDeleteAndPasswordButtonDisabled(false);
+                    }}
                   />
                 )}
                 {isChangePassword && (

@@ -12,23 +12,23 @@ function Home() {
   };
   return (
     <>
-      <div className="grid content-center min-h-screen grid-cols-1 bg-blue-700 md:grid-cols-2 justify-items-center ">
+      <div className="grid content-center min-h-screen grid-cols-1 bg-blue-600 md:grid-cols-2 justify-items-center ">
         <div className="p-4">
           <p className="text-3xl font-bold text-center">Protected Text</p>
         </div>
         <div className="px-10 py-4 md:px-20">
-          <ul className="space-y-4 list-disc list-outside">
+          <ul className="space-y-4 font-sans text-xl list-disc list-outside">
             <li>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Inventore, ad blanditiis. Blanditiis veritatis tempora quis,
+              Protectedtext is a notepad with password, where you can securely
+              save your notes on the web.
             </li>
             <li>
-              iusto, corporis dolorum, accusamus atque at eligendi odit saepe.
-              Reprehenderit eveniet expedita distinctio modi sed.
+              Enter any URL, e.g. protectedtext.com/anything. If you find it ,
+              it is yours!
             </li>
             <li>
-              iusto, corporis dolorum, accusamus atque at eligendi odit saepe.
-              Reprehenderit eveniet expedita distinctio modi sed.
+              Encrypt all your notes, and access your note anywhere with your
+              url and password.
             </li>
           </ul>
         </div>

@@ -170,3 +170,57 @@ describe("POST / ", () => {
     expect(response.body).toHaveProperty("message");
   });
 });
+
+describe("DELETE /", () => {
+  let noteData;
+  let existingSite;
+  beforeEach(() => {
+    noteData = {
+      id: "test999",
+      initHash:
+        "43db4d6819813366729707ab93a2533ce0b6d405c66b76995472d36798f6bb53ff45f87d6efb5a5c822af7112d858d3f5fc0bde5e98ca4206391403060e3e3b7",
+    };
+    existingSite = {
+      id: "test999",
+      encryptedContent:
+        "U2FsdGVkX19h3AjJNnXeDJlr2PJ81Z8eeIXU10qFlDxBK77ePuJtXKMY5LT1FWMt",
+      hash: "43db4d6819813366729707ab93a2533ce0b6d405c66b76995472d36798f6bb53ff45f87d6efb5a5c822af7112d858d3f5fc0bde5e98ca4206391403060e3e3b7",
+    };
+  });
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it("should delete the data with given id if ", async () => {
+    Note.findOne = jest.fn().mockResolvedValue(existingSite);
+    Note.deleteOne = jest.fn().mockResolvedValue({ deletedCount: 1 });
+    const response = await request(app)
+      .delete("/api/notes")
+      .send(noteData)
+      .expect(200);
+    const { delete: del } = response.body;
+    expect(del).toBe(true);
+  });
+  it("should return 401 with unauthorized access if the given inital hash is incorrect to the hash stored in database", async () => {
+    Note.findOne = jest.fn().mockResolvedValue(existingSite);
+    const incorrectHash =
+      "53db4d6819813366729707ab93a2533ce0b6d405c66b76995472d36798f6bb53ff45f87d6efb5a5c822af7112d858d3f5fc0bde5e98ca4206391403060e3e3b7";
+    noteData.initHash = incorrectHash;
+    const response = await request(app)
+      .delete("/api/notes")
+      .send(noteData)
+      .expect(401);
+    expect(response.body).toEqual({
+      message: "Unauthorized",
+      code: "UNAUTHORIZED_ERROR",
+    });
+  });
+  it("responds with 404 Not Found when the note does not exist", async () => {
+    Note.findOne.mockResolvedValueOnce(null);
+    const response = await request(app).delete("/").send(noteData).expect(404);
+    expect(response.body).toEqual({
+      message: "Not Found DELETE /",
+      code: "NOT_FOUND",
+    });
+  });
+});

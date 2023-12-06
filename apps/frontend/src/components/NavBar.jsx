@@ -5,7 +5,8 @@ const Navbar = ({
   onSaveClick,
   isSaveButtonDisabled,
   onChangeClick,
-  password,
+  onDelete,
+  isDeleteAndPasswordButtonDisabled,
 }) => {
   return (
     <>
@@ -19,10 +20,18 @@ const Navbar = ({
             >
               Save
             </CustomButton>
-            <CustomButton onClick={onChangeClick} buttonDisabled={!password}>
+            <CustomButton
+              onClick={onChangeClick}
+              buttonDisabled={isDeleteAndPasswordButtonDisabled}
+            >
               Change Password
             </CustomButton>
-            <CustomButton>Delete</CustomButton>
+            <CustomButton
+              onClick={onDelete}
+              buttonDisabled={isDeleteAndPasswordButtonDisabled}
+            >
+              Delete
+            </CustomButton>
           </div>
         </div>
       </div>
@@ -33,6 +42,8 @@ Navbar.propTypes = {
   onSaveClick: PropTypes.func,
   isSaveButtonDisabled: PropTypes.bool,
   onChangeClick: PropTypes.func,
+  onDelete: PropTypes.func,
   password: PropTypes.string,
+  isDeleteAndPasswordButtonDisabled: PropTypes.bool,
 };
 export default Navbar;

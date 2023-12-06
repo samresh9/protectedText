@@ -11,6 +11,7 @@ import NewPasswordModal from "./NewPasswordModal.jsx";
 import Loader from "./Loader.jsx";
 import ModalLayout from "./ModalLayout.jsx";
 import AlertModal from "./AlertModal.jsx";
+import DeleteModal from "./DeleteModal.jsx";
 
 const { encryptData, hashData } = encryptionHandler;
 const modalType = Object.freeze({
@@ -31,6 +32,12 @@ function WrapperComponent() {
   const [isOpenCreateNewModal, setIsOpenCreateNewModal] = useState(true);
   const [isSavedAlert, setIsSavedAlert] = useState(false);
   const [errors, setErrors] = useState("");
+  const [isDeleteSite, setIsDeleteSite] = useState(false);
+  const [isDeleteSuccessfull, setIsDeleteSuccessful] = useState(false);
+  const [
+    isDeleteAndPasswordButtonDisabled,
+    setIsDeleteAndPasswordButtonDisabled,
+  ] = useState(true);
   const fetcher = async (...args) => {
     const res = await fetch(...args);
     return res.json();
@@ -100,6 +107,40 @@ function WrapperComponent() {
     );
     return { response, currentHash };
   };
+  const handleDelteData = async () => {
+    try {
+      if (!isDeleteSite) {
+        setIsDeleteSite(true);
+        return;
+      }
+      const postData = {
+        id: lowercaseId,
+        initHash,
+      };
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}api/notes`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(postData),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Something Went Wrong Please Reload");
+      }
+      setIsDeleteSuccessful(true);
+      setIsSavedAlert(true);
+      setIsDeleteSite(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (err) {
+      setErrors(err.message);
+    }
+  };
+
   const handleSaveClick = async () => {
     try {
       if (!password && !isNewPassword) {
@@ -113,6 +154,7 @@ function WrapperComponent() {
       }
       setIsSavedAlert(true);
       setIsSaveButtonDisabled(true);
+      setIsDeleteAndPasswordButtonDisabled(false);
       setInitHash(currentHash);
     } catch (err) {
       setErrors(err.message);
@@ -155,12 +197,18 @@ function WrapperComponent() {
           <Navbar
             onSaveClick={handleSaveClick}
             onChangeClick={handleChangePassword}
+            onDelete={handleDelteData}
             isSaveButtonDisabled={isSaveButtonDisabled}
+            isDeleteAndPasswordButtonDisabled={
+              isDeleteAndPasswordButtonDisabled
+            }
             password={password}
+            isNewSite={textAreaValue}
           />
           {isLoadingSaveData && <Loader />}
           {isSavedAlert && (
             <AlertModal
+              isDeleteSite={isDeleteSuccessfull}
               onCloseAlert={() => {
                 setIsSavedAlert(false);
               }}
@@ -193,6 +241,9 @@ function WrapperComponent() {
                     setInitHash={setInitHash}
                     password={password}
                     setPassword={setPassword}
+                    onDeleteAndPasswordButtonDisabled={() => {
+                      setIsDeleteAndPasswordButtonDisabled(false);
+                    }}
                   />
                 )}
                 {isChangePassword && (
@@ -220,6 +271,15 @@ function WrapperComponent() {
                     modalTitle="Create a password"
                     modalMessage=" Make sure to remember the password. We do not store passwords,
                   just the encrypted data."
+                  />
+                )}
+                {isDeleteSite && (
+                  <DeleteModal
+                    urlId={id}
+                    onClose={() => {
+                      setIsDeleteSite(false);
+                    }}
+                    onDeleteSite={handleDelteData}
                   />
                 )}
               </>
